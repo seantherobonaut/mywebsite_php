@@ -9,4 +9,4 @@
 /app/logs/
 .replit
 replit.nix
-/.ssh/
+gitstart.sh
