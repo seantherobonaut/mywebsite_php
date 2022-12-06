@@ -1,0 +1,34 @@
+ErrorDocument 403 /public/views/errors/403.php
+ErrorDocument 404 /public/views/errors/404.php
+
+#Prevent access to all important files
+<FilesMatch ".(htaccess|php|ini|log|sh)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+#Allow access to index.php
+<FilesMatch "^(index|403|404)\.php$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+#Prevent directory listing
+<IfModule mod_negotiation.c>
+    Options -MultiViews -Indexes
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    #Erase trailing slashes from URL
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]   
+
+    #Direct all requests to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-l
+    RewriteRule ^.*$ /index.php [NC,QSA,L]
+</IfModule>

@@ -1,0 +1,12 @@
+# Guidelines
+# .name - ignore this file
+# /folder/ - ignore this folder
+# folder/* - ignore all files in that directory
+# !folder/file.txt - ignore * directory except this one file)
+/1temp/
+/lib/
+/app/dependencies.php
+/app/logs/
+.replit
+replit.nix
+/.ssh/
