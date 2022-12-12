@@ -1,5 +1,6 @@
 <?php
     //Basic path router
+    //For each call, return: content type, output, http status code
     class Router
     {
         private $routes = array();
@@ -53,7 +54,7 @@
                 $route = explode("/", $route);
             }
             else
-                $route = array('root');
+                $route = array('page','home');
 
             //Get the first node off of route (array pop)
             $node = array_shift($route);
