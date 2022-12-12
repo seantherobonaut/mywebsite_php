@@ -3,8 +3,6 @@
 
     $app = new Router();
 
-    require 'path_pages.php';
-
     $app->get("test", function()
     {
         echo phpversion();
