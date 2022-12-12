@@ -5,7 +5,7 @@
 # !folder/file.txt - ignore * directory except this one file)
 /1temp/
 /lib/
-/app/dependencies.php
+/app/dependency_list.php
 /app/logs/
 .replit
 replit.nix

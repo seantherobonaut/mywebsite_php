@@ -19,7 +19,7 @@
 
     //Utility to load Class/Abstract/Interface files
     require $GLOBALS['path_lib'].'DependencyManagerClass.php';
-    $loader = new DependencyManager($GLOBALS['path_app'].'includes.php');;
+    $loader = new DependencyManager($GLOBALS['path_app'].'dependency_list.php');;
     $loader->addSearchPath($GLOBALS['path_app']);
     $loader->addSearchPath($GLOBALS['path_lib']);
     $loader->enable(true);
