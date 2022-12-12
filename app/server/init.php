@@ -18,7 +18,7 @@
         header('Content-Type: text/html; charset=utf-8');
         http_response_code(404);
 
-        require 'public/views/errors/404.php';
+        require $GLOBALS['path_app'].'client/views/errors/404.php';
     });
 
     $app->listen();
