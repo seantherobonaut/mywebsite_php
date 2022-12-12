@@ -13,7 +13,7 @@
         if($error_data['type']=='E_ERROR' || $error_data['type']=='E_USER_ERROR' || $error_data['type']=='EXCEPTION')
             echo 'An internal error has occurred. Please try again later.<br>';
             
-        push_log($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.$error_data['type'].' '.$error_data['msg'].' -> '.$error_data['file'].'@line:'.$error_data['line']."\n");
+        append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.$error_data['type'].' '.$error_data['msg'].' -> '.$error_data['file'].'@line:'.$error_data['line']."\n");
     });
     $debug->enable(true);
 
@@ -29,7 +29,7 @@
     $GLOBALS['db_conn'] = new DBconn;
     $GLOBALS['db_conn']->addHandler(function($error)
     {
-        push_log($GLOBALS['path_app'].'logs/database.log', date('[Y-n-d G:i:s e]').' - '.$error."\n");
+        append_file($GLOBALS['path_app'].'logs/database.log', date('[Y-n-d G:i:s e]').' - '.$error."\n");
     });
     $GLOBALS['db_conn']->connect($db_creds['host'], $db_creds['dbname'], $db_creds['username'], $db_creds['password']);
 ?>
