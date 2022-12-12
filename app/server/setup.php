@@ -23,13 +23,4 @@
     $loader->addSearchPath($GLOBALS['path_app']);
     $loader->addSearchPath($GLOBALS['path_lib']);
     $loader->enable(true);
-
-    //Setup database connection
-    $db_creds = json_decode(getenv('DB_JSON'), 1);    
-    $GLOBALS['db_conn'] = new DBconn;
-    $GLOBALS['db_conn']->addHandler(function($error)
-    {
-        append_file($GLOBALS['path_app'].'logs/database.log', date('[Y-n-d G:i:s e]').' - '.$error."\n");
-    });
-    $GLOBALS['db_conn']->connect($db_creds['host'], $db_creds['dbname'], $db_creds['username'], $db_creds['password']);
 ?>

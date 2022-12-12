@@ -3,13 +3,6 @@
 
     $app = new Router();
 
-    $app->get("test", function()
-    {
-        echo phpversion();
-        echo '<br>';
-        echo $_SERVER['REMOTE_ADDR'];
-    });
-
     //Overwrite the basic 404 route
     $app->get("404", function($route)
     {
@@ -27,7 +20,7 @@
         $page = array_shift($route);
 
         //Simulate searching a database for objects that match the root path node
-        $fakeDB = array('home'=>'home','about'=>'about','test'=>'content');
+        $fakeDB = array('home'=>'home','about'=>'about');
 
         //If the path cannot be found, return 404
         if(empty($fakeDB[$page]))
