@@ -60,9 +60,14 @@
 
             //Call and pass path data to anonymous functions
             if(isset($this->routes[$method][$node]))
-                $this->routes[$method][$node]($route);
-            else 
-                $this->routes[$method]['404']($route);
+            {
+                call_user_func($this->routes[$method][$node], $route);                
+            }
+            else
+            {
+                if(isset($this->routes[$method]['404']))
+                    call_user_func($this->routes[$method]['404'], $route);
+            }
         }
     }
 ?>
