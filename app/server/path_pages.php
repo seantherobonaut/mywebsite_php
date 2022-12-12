@@ -15,13 +15,13 @@
         if(empty($fakeDB[$page]))
         {
             http_response_code(404);
-            require 'public/views/errors/404.php';
+            require $GLOBALS['path_app'].'client/views/errors/404.php';
         }
         else
         {
             $type = $fakeDB[$page];
-            $subtemplate = 'public/views/pages/'.$type.'.php';        
-            require 'public/views/root_template.php';
+            $subtemplate = $GLOBALS['path_app'].'client/views/pages/'.$type.'.php';        
+            require $GLOBALS['path_app'].'client/views/root_template.php';
         }
     }
 

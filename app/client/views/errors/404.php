@@ -15,6 +15,6 @@
     </head>
     <body>
         <h1>Error 404</h1>
-        <img style="width:100%;max-width:500px;border:1px solid black;border-radius:7px" src="/public/images/404.jpg">
+        <img style="width:100%;max-width:500px;border:1px solid black;border-radius:7px" src="/app/client/images/404.jpg">
     </body>
 </html>
