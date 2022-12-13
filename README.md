@@ -1,5 +1,5 @@
 # My personal website!
-Requires the use of my [php-lib](https://github.com/seantherobonaut/mywebsite_php) library. 
+Requires the use of my [php-lib](https://github.com/seantherobonaut/php-lib) library. 
 
 For the website to even start, the global paths must be configured in index.php.
 ```php
