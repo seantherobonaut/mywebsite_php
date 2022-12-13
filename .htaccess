@@ -1,5 +1,5 @@
-ErrorDocument 403 /public/views/errors/403.php
-ErrorDocument 404 /public/views/errors/404.php
+ErrorDocument 403 /app/client/views/errors/403.php
+ErrorDocument 404 /app/client/views/errors/404.php
 
 #Prevent access to all important files
 <FilesMatch ".(htaccess|php|ini|log|sh)$">
