@@ -1,7 +1,122 @@
-<?php
-    echo 'hi';
-?>
-<h1>Hello world!</h1>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+            
+        <meta name="author" content="Sean Leapley">
+        <meta name="description" content="Testing page">
+        <title>Testing!</title>            
+
+        <!-- tBootstrap 5 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+        <style type="text/css">
+            body{margin:0px;}
+
+            body
+            {
+                background-color:#777;
+            }
+
+            #mybox
+            {
+                
+            }
+        </style>
+    </head>
+    <body>
+
+    
+        <div id="mybox" class="container my-5 px-5 py-5 bg-dark text-white rounded-circle" style="max-width:700px;">
+            <h1>Serious Attempt Bootstrap Page</h1>
+            <p>This container has a dark background and uses special rounded corners that change shape with its size.</p>
+
+            <button id="special" type="button" class="btn btn-primary">I am a button!</button>
+            
+            <ul id="mylist" class="list-group my-3">
+              <li class="list-group-item">First item</li>              
+            </ul>
+            
+        </div>
+        
+        <script type="text/javascript">
+
+//url
+//type
+//data
+//datatype
+
+    
+            let mybutton = document.getElementById('special');
+            let mylist = document.getElementById('mylist');    
+
+            //it's good practice to create one xhttp object, send the request, and dispose of it, (asychronous stuffs)
+                //basically, with only one xhttp object, you are forcing sychronous behavior, the other request can't start until the other one ends
+            let counter = 1;
+            mybutton.addEventListener("click", function()
+            {                
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function()
+                {
+                    if(this.readyState==4 && this.status==200)
+                    {                    
+                        // let data = JSON.parse(this.responseText);
+                        let data = this.responseText;
+                        
+                        let newItem = document.createElement('li');
+                        newItem.className = 'list-group-item';
+                        newItem.innerHTML = data;
+                        mylist.appendChild(newItem);
+                    }
+                    else
+                    {
+                        if(this.readyState==4 && this.readyState==404)
+                            console.log("Well, that didn't work...");
+                    }
+                        
+                };
+                xhttp.open("GET", "/ajax_test?comment=click_number_"+counter++, true);
+                xhttp.send();
+            });
+
+            
+            // let mybutton = document.getElementById('special');
+            // let mylist = document.getElementById('mylist');    
+
+            // mybutton.addEventListener("click", function()
+            // {
+            //     let newItem = document.createElement('li');
+            //     newItem.className = 'list-group-item';
+            //     newItem.innerHTML = "frogs!";
+            //     mylist.appendChild(newItem);
+            // });
+
+
+            // //post example ( $_POST['fname'] etc...)
+            // xhttp.open("POST", "ajax_test.asp");
+            // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            // xhttp.send("fname=Henry&lname=Ford");
+
+
+            
+
+
+// xhttp.open("POST","your_url.php",true);
+
+// xhttp.setRequestHeader("Content-type","application/json; charset=UTF-8") ; //to send json
+// xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+
+// xhttp.send("name="+name + "&" + "email="+email);
+
+        </script>
+        
+        
+    </body>
+</html>
+
 <!-- <style type="text/css">
     #content p
     {
