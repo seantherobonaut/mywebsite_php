@@ -36,25 +36,78 @@
 
             <button id="special" type="button" class="btn btn-primary">I am a button!</button>
             
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                Login
+            </button>
+            
             <ul id="mylist" class="list-group my-3">
               <li class="list-group-item">First item</li>              
             </ul>
             
         </div>
+
+  
+
+        <!-- The Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Login:</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        
+<form action="/action_page.php">
+    <div class="mb-3 mt-3">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+    </div>
+    <div class="mb-3">
+        <label for="pwd">Password:</label>
+        <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
+    </div>
+    <div class="form-check mb-3">
+        <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" name="remember"> Remember me</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+                        
+<!--                         <form class="form-inline" action="/">
+                            <div class="form-group">
+                                <input type="email" class="form-control" placeholder="Enter email" id="email">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form> -->
+
+                        
+                    </div>
+                
+                    
+                </div>
+            </div>
+        </div>        
+
+
+
         
         <script type="text/javascript">
 
-//url
-//type
-//data
-//datatype
+            //url
+            //type
+            //data
+            //datatype
 
-    
             let mybutton = document.getElementById('special');
             let mylist = document.getElementById('mylist');    
 
             //it's good practice to create one xhttp object, send the request, and dispose of it, (asychronous stuffs)
-                //basically, with only one xhttp object, you are forcing sychronous behavior, the other request can't start until the other one ends
+            //basically, with only one xhttp object, you are forcing sychronous behavior, the other request can't start until the other one ends
             let counter = 1;
             mybutton.addEventListener("click", function()
             {                
