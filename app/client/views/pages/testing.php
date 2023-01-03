@@ -3,32 +3,43 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=0device-width, initial-scale=1">
             
         <meta name="author" content="Sean Leapley">
         <meta name="description" content="Testing page">
         <title>Testing!</title>            
 
-        <!-- tBootstrap 5 -->
+        <!-- Bootstrap 5 -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
-        <style type="text/css">
-            body{margin:0px;}
 
-            body
+
+
+
+        
+        <style type="text/css">
+            html,body{margin:0px;padding:0px;}
+
+            body{background-color:#777;}
+
+            #auth form input
             {
-                background-color:#777;
+                margin-bottom:10px;
             }
 
-            #mybox
+            #auth form input[type=submit]
             {
-                
+                margin-bottom:0px;
             }
         </style>
     </head>
     <body>
 
+
+
+
+        
     
         <div id="mybox" class="container my-5 px-5 py-5 bg-dark text-white rounded-circle" style="max-width:700px;">
             <h1>Serious Attempt Bootstrap Page</h1>
@@ -36,59 +47,55 @@
 
             <button id="special" type="button" class="btn btn-primary">I am a button!</button>
             
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                Login
-            </button>
-            
             <ul id="mylist" class="list-group my-3">
               <li class="list-group-item">First item</li>              
             </ul>
-            
+
+            <!-- login button -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#auth">
+                Login
+            </button>
+
         </div>
 
   
 
-        <!-- The Modal -->
-        <div class="modal" id="myModal">
+
+        <!-- plan: have multiple types of forms hidden within the modal for different purposes     -->
+        <!-- Login Prompt -->
+        <div id="auth" class="modal mt-5">
             <div class="modal-dialog">
                 <div class="modal-content">
-                
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Login:</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        
-<form action="/action_page.php">
-    <div class="mb-3 mt-3">
-        <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
-    </div>
-    <div class="mb-3">
-        <label for="pwd">Password:</label>
-        <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
-    </div>
-    <div class="form-check mb-3">
-        <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" name="remember"> Remember me</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-                        
-<!--                         <form class="form-inline" action="/">
-                            <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Enter email" id="email">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form> -->
 
-                        
-                    </div>
-                
+                    <!-- TODO: Create the warning popups!!! -->
                     
+                    <div class="modal-header">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-dark active" data-targetform="login")">Sign In</button>
+                            <button type="button" class="btn btn-outline-dark" data-targetform="forgotPass")">Forgot Password</button>
+                            <button type="button" class="btn btn-outline-dark" data-targetform="createNew")">Register</button>                            
+                        </div>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+                    </div>
+                    
+                    <form id="login" class="modal-body" action="/login">
+                        Username: <input class="form-control" type="text" name="username" placeholder="Username...">
+                        Password: <input class="form-control" type="password" name="password" placeholder="Password...">
+                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
+                    </form>    
+
+                    <form id="forgotPass" class="modal-body" action="/login" style="display:none">
+                        Email: <input class="form-control" type="email" name="email" placeholder="Email...">
+                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
+                    </form>   
+
+                    <form id="createNew" class="modal-body" action="/login" style="display:none">
+                        Email: <input class="form-control" type="text" name="username" placeholder="Username...">
+                        Username: <input class="form-control" type="email" name="email" placeholder="Email...">
+                        Password: <input class="form-control" type="password" name="password" placeholder="Password...">
+                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
+                    </form>  
+                
                 </div>
             </div>
         </div>        
@@ -98,42 +105,131 @@
         
         <script type="text/javascript">
 
+            //Modal form controls
+            let authButtons = document.querySelectorAll("#auth .modal-header button");
+            let authForms = document.querySelectorAll("#auth form");
+            authButtons.forEach(function(element)
+            {
+                element.addEventListener("click", function()
+                {
+                    let button = this;
+                    let targetID = this.dataset.targetform;
+
+                    //ensure all buttons inactive
+                    authButtons.forEach(function(element)
+                    {
+                        element.classList.remove("active");
+                    });
+                    //make this button active
+                    button.classList.add("active");
+                    
+                    //ensure hiding all forms
+                    authForms.forEach(function(element)
+                    {
+                        element.style.display = "none";
+                    });
+                    //show target form
+                    document.getElementById(targetID).style.display = "block";
+                });
+            });
+
+
             //url
             //type
             //data
             //datatype
 
-            let mybutton = document.getElementById('special');
-            let mylist = document.getElementById('mylist');    
+            //on submit, return errors in bootstrap alerts, clear form, etc...
 
-            //it's good practice to create one xhttp object, send the request, and dispose of it, (asychronous stuffs)
-            //basically, with only one xhttp object, you are forcing sychronous behavior, the other request can't start until the other one ends
-            let counter = 1;
-            mybutton.addEventListener("click", function()
-            {                
-                let xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function()
+            document.querySelectorAll("#auth form").forEach(function(element)
+            {
+                element.addEventListener("submit", function(event)
                 {
-                    if(this.readyState==4 && this.status==200)
-                    {                    
-                        // let data = JSON.parse(this.responseText);
-                        let data = this.responseText;
-                        
-                        let newItem = document.createElement('li');
-                        newItem.className = 'list-group-item';
-                        newItem.innerHTML = data;
-                        mylist.appendChild(newItem);
-                    }
-                    else
+                    event.preventDefault();
+                    
+                    let inputs = this.querySelectorAll('input:not([type="submit"])');
+
+                    let xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function()
                     {
-                        if(this.readyState==4 && this.readyState==404)
-                            console.log("Well, that didn't work...");
-                    }
-                        
-                };
-                xhttp.open("GET", "/ajax_test?comment=click_number_"+counter++, true);
-                xhttp.send();
+                        if(this.readyState==4 && this.status==200)
+                        {                    
+                            // let data = JSON.parse(this.responseText);
+                            let data_response = this.responseText;
+
+                            // let newItem = document.createElement('li');
+                            // newItem.className = 'list-group-item';
+                            // newItem.innerHTML = data;
+                            // mylist.appendChild(newItem);
+                        }
+                        else
+                        {
+                            //TODO make sure entries can't be submitted if any are empty... do this serverside too
+                            //TODO add bootstrap errors
+                            if(this.readyState==4 && this.readyState==404)
+                                console.log("Well, that didn't work...");
+                        }
+                    };
+
+                    //TODO gather type and path and data
+
+                    let data_request = null;
+                    
+                    this.reset();
+                    xhttp.open("POST", "/login", true);
+                    xhttp.setRequestHeader("Content-type","application/json; charset=UTF-8");
+                    xhttp.send();
+                });
             });
+
+                
+                 
+
+
+
+
+
+
+
+
+
+
+            
+
+
+            
+
+            
+            // //it's good practice to create one xhttp object, send the request, and dispose of it, (asychronous stuffs)
+            // //basically, with only one xhttp object, you are forcing sychronous behavior, the other request can't start until the other one ends
+            // let mybutton = document.getElementById('special');
+            // let mylist = document.getElementById('mylist');
+            // let counter = 1;
+            // mybutton.addEventListener("click", function()
+            // {                
+            //     let xhttp = new XMLHttpRequest();
+            //     xhttp.onreadystatechange = function()
+            //     {
+            //         if(this.readyState==4 && this.status==200)
+            //         {                    
+            //             // let data = JSON.parse(this.responseText);
+            //             let data = this.responseText;
+                        
+            //             let newItem = document.createElement('li');
+            //             newItem.className = 'list-group-item';
+            //             newItem.innerHTML = data;
+            //             mylist.appendChild(newItem);
+            //         }
+            //         else
+            //         {
+            //             if(this.readyState==4 && this.readyState==404)
+            //                 console.log("Well, that didn't work...");
+            //         }
+                        
+            //     };
+            //     xhttp.open("GET", "/ajax_test?comment=click_number_"+counter++, true);
+            //     xhttp.send();
+            // });
 
             
             // let mybutton = document.getElementById('special');
@@ -159,7 +255,7 @@
 
 // xhttp.open("POST","your_url.php",true);
 
-// xhttp.setRequestHeader("Content-type","application/json; charset=UTF-8") ; //to send json
+// xhttp.setRequestHeader("Content-type","application/json; charset=UTF-8"); //to send json
 // xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 
 // xhttp.send("name="+name + "&" + "email="+email);

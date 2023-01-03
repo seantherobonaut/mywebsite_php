@@ -3,6 +3,9 @@
 
     $app = new Router();
 
+
+
+
     $app->get("testing", function($route_data)
     {
         header('Content-Type: text/html; charset=utf-8');
@@ -19,6 +22,27 @@
             http_response_code(404);
     });
 
+
+
+
+
+    $app->post("login", function($route_data)
+    {
+        if(!empty($_POST['username']))
+        {
+            if($_POST['username'] == 'sean')
+                echo true;
+            else
+                echo false;
+        }
+        else
+            echo false;
+    });
+
+    $app->post("newUser", function($route_data)
+    {
+        echo "not enabled yet";
+    });
 
 
 
