@@ -4,8 +4,6 @@
     $app = new Router();
 
 
-
-
     $app->get("testing", function($route_data)
     {
         header('Content-Type: text/html; charset=utf-8');
@@ -13,30 +11,25 @@
         require $GLOBALS['path_app'].'client/views/pages/testing.php';
     });
 
-    $app->get("ajax_test", function($route_data)
-    {
-        // header('Content-Type: application/json; charset=utf-8');
-        if(isset($_GET["comment"]))
-            echo $_GET["comment"]."!";
-        else            
-            http_response_code(404);
-    });
-
-
-
-
-
     $app->post("login", function($route_data)
     {
         if(!empty($_POST['username']))
         {
+            //this is where the logic for the login system is created
+            
             if($_POST['username'] == 'sean')
-                echo true;
+            {
+                echo json_encode(array("alert_type" => "success", "alert_msg" => "Login successful"));
+            }
             else
-                echo false;
+            {
+                echo json_encode(array("alert_type" => "warning", "alert_msg" => "User not found."));
+            }
         }
         else
-            echo false;
+        {
+            echo json_encode(array("alert_type" => "info", "alert_msg" => "Missing fields."));
+        }
     });
 
     $app->post("newUser", function($route_data)
