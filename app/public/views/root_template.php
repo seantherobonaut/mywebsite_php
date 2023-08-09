@@ -8,7 +8,7 @@
         <meta name="author" content="Sean Leapley">
         <meta name="description" content="My personal website">
         <title><?php echo ucfirst($page);?></title>            
-        <link rel="shortcut icon" href="/app/client/images/awesome_face.ico">
+        <link rel="shortcut icon" href="/app/public/images/awesome_face.ico">
 
         <!-- Jquery and Bootstrap -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>        
@@ -20,15 +20,15 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <!-- Style for layout -->
-        <link rel="stylesheet" type="text/css" href="/app/client/css/layout.css"> 
+        <link rel="stylesheet" type="text/css" href="/app/public/css/layout.css"> 
     </head>
     <body class="d-flex flex-column align-items-stretch">
-        <?php require $GLOBALS['path_app'].'client/views/frontEndCompat.php';?>
+        <?php require $GLOBALS['path_public'].'views/frontEndCompat.php';?>
             
         <!-- Header -->
         <div id="header" class="jumbotron text-center border p-4 flex-shrink-0">
             <div id="bannerBG"></div>
-            <img src="/app/client/images/me2.jpg" class="rounded-circle img-thumbnail img-fluid" width="250" height="250" alt="Sean Leapley">
+            <img src="/app/public/images/me2.jpg" class="rounded-circle img-thumbnail img-fluid" width="250" height="250" alt="Sean Leapley">
             <h3>
                 <small class="font-italic">"Imagination is more important than knowledge."</small>
                 <p class="blockquote-footer small" style="font-size:70%;margin-top:10px">Albert Einstein</p>
@@ -46,7 +46,7 @@
                     <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link <?php if($page=='home')echo 'active';?>" href="/">Home</a></li>
                         <li class="nav-item"><a class="nav-link <?php if($page=='about')echo 'active';?>" href="/page/about">About Me</a></li>   
-                        <li class="nav-item"><a class="nav-link" href="/app/client/Resume.pdf">Resume</a></li>   
+                        <li class="nav-item"><a class="nav-link" href="/app/public/Resume.pdf">Resume</a></li>   
                     </ul>
                 </div>  
             </div>

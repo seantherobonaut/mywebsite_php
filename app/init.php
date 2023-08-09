@@ -8,7 +8,7 @@
     {
         header('Content-Type: text/html; charset=utf-8');
 
-        require $GLOBALS['path_app'].'client/views/pages/testing.php';
+        require $GLOBALS['path_public'].'views/pages/testing.php';
     });
 
     $app->post("login", function($route_data)
@@ -48,7 +48,7 @@
         header('Content-Type: text/html; charset=utf-8');
         http_response_code(404);
 
-        require $GLOBALS['path_app'].'client/views/errors/404.php';
+        require $GLOBALS['path_public'].'views/errors/404.php';
     });
 
     $app->get("page", function($route_data)
@@ -65,13 +65,13 @@
         if(empty($fakeDB[$page]))
         {
             http_response_code(404);
-            require $GLOBALS['path_app'].'client/views/errors/404.php';
+            require $GLOBALS['path_public'].'views/errors/404.php';
         }
         else
         {
             $type = $fakeDB[$page];
-            $subtemplate = $GLOBALS['path_app'].'client/views/pages/'.$type.'.php';        
-            require $GLOBALS['path_app'].'client/views/root_template.php';
+            $subtemplate = $GLOBALS['path_public'].'views/pages/'.$type.'.php';        
+            require $GLOBALS['path_public'].'views/root_template.php';
         }
     });
 
