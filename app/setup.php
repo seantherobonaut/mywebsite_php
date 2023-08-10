@@ -1,6 +1,6 @@
 <?php
     //Halt program if paths aren't setup
-    if(!isset($GLOBALS['path_root']) || !isset($GLOBALS['path_lib']) || !isset($GLOBALS['path_app']) || !isset($GLOBALS['path_public']))
+    if(!isset($GLOBALS['path_root']) || !isset($GLOBALS['path_lib']) || !isset($GLOBALS['path_app']) || !isset($GLOBALS['path_public']) || !isset($GLOBALS['path_local']))
         exit('Path setup incorrect.<br>');
 
     require $GLOBALS['path_lib'].'utils.php';
