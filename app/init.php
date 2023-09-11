@@ -20,7 +20,8 @@
     });
 
     //Add all routes below
-    require $GLOBALS['path_app'].'routes_pages.php';
+    require $GLOBALS['path_app'].'account_manager/routes_users.php';
+    require $GLOBALS['path_app'].'public/routes_pages.php';
 
     $app->listen();
 ?>

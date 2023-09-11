@@ -18,12 +18,12 @@
 
             body{background-color:#777;}
 
-            #auth form input
+            #profile form input
             {
                 margin-bottom:10px;
             }
 
-            #auth form input[type=submit]
+            #profile form input[type=submit]
             {
                 margin-bottom:0px;
             }
@@ -37,50 +37,64 @@
             <h1>Test Bootstrap Page</h1> 
             <p>This container has a dark background and uses special rounded corners that change shape with its size.</p>    
 
-            
-
-            <!-- login button -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#auth">
-                Login   
+            <!-- Profile Button -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#profile">
+                Profile   
             </button>
 
         </div>
 
   
-        <!-- Login Prompt -->
-        <div id="auth" class="modal mt-5">
+        <!-- Profile Prompt -->
+        <div id="profile" class="modal fade mt-5">
             <div class="modal-dialog">
                 <div class="modal-content">
                     
                     <div class="modal-header">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-outline-dark active" data-targetform="login">Sign In</button>
-                            <button type="button" class="btn btn-outline-dark" data-targetform="forgotPass">Forgot Password</button>
-                            <button type="button" class="btn btn-outline-dark" data-targetform="createNew">Register</button>                            
-                        </div>
+                        <div id="results" class="container lh-1 p-0" ><!-- Bootstrap alerts go here --></div>
                         <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                     </div>
-
-                    <div id="results" class="container lh-1 p-2" ><!-- Bootstrap alerts go here --></div>
+        
+                    <div class="modal-body p-0">
+                        <div class="container-fluid p-0">
+                            <div class="row m-0">
+                                <div class="col-sm-3 p-0 ps-2 py-3">                    
+                                    <div id="profilebuttons" class="btn-group-vertical">
+                                        <button type="button" class="btn btn-outline-dark active" data-targetform="login">Sign In</button>
+                                        <button type="button" class="btn btn-outline-dark" data-targetform="forgotPass">Forgot Pass</button>
+                                        <button type="button" class="btn btn-outline-dark" data-targetform="forgotEmail">Forgot Email</button>
+                                        <button type="button" class="btn btn-outline-dark" data-targetform="register">Register</button>                            
+                                    </div>                                    
+                                </div>
+                                <div class="col-sm-9 p-1">
+                                    <form id="login" class="modal-body m-1 p-1" method="POST" action="/login">
+                                        Username: <input class="form-control" type="text" name="username" placeholder="Username..." >
+                                        Password: <input class="form-control" type="password" name="password" placeholder="Password...">
+                                        <input type="submit" class="btn btn-primary mt-1" value="Login">
+                                    </form>    
                     
-                    <form id="login" class="modal-body" method="POST" action="/login">
-                        Username: <input class="form-control" type="text" name="username" placeholder="Username..." >
-                        Pass: <input class="form-control" type="password" name="password" placeholder="Password...">
-                        <input type="submit" class="btn btn-primary mt-1" value="Login">
-                    </form>    
+                                    <form id="forgotPass" class="modal-body m-1 p-1" method="POST" action="/forgotPass" style="display:none">
+                                        Email: <input class="form-control" type="email" name="email" placeholder="Email...">
+                                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
+                                    </form>   
 
-                    <form id="forgotPass" class="modal-body" method="POST" action="/login" style="display:none">
-                        Email: <input class="form-control" type="email" name="email" placeholder="Email...">
-                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
-                    </form>   
+                                    <form id="forgotEmail" class="modal-body m-1 p-1" method="POST" action="/forgotEmail" style="display:none">
+                                        Username: <input class="form-control" type="text" name="username" placeholder="Username...">
+                                        After getting username, put a list of personal questions here<br>
+                                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
+                                    </form>                                    
+                    
+                                    <form id="register" class="modal-body m-1 p-1" method="POST" action="/user_register" style="display:none">
+                                        Email: <input class="form-control" type="text" name="username" placeholder="Username...">
+                                        Username: <input class="form-control" type="email" name="email" placeholder="Email...">
+                                        Password: <input class="form-control" type="password" name="password" placeholder="Password...">
+                                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
+                                    </form>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <form id="createNew" class="modal-body" method="POST" action="/login" style="display:none">
-                        Email: <input class="form-control" type="text" name="username" placeholder="Username...">
-                        Username: <input class="form-control" type="email" name="email" placeholder="Email...">
-                        Password: <input class="form-control" type="password" name="password" placeholder="Password...">
-                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
-                    </form>  
-                
                 </div>
             </div>
         </div>        
@@ -89,8 +103,8 @@
         <script type="text/javascript">
 
             //Modal form controls (toggle forms on/off)
-            let authButtons = document.querySelectorAll("#auth .modal-header button");
-            let authForms = document.querySelectorAll("#auth form");
+            let authButtons = document.querySelectorAll("#profilebuttons button");
+            let authForms = document.querySelectorAll("#profile form");
             authButtons.forEach(function(element)
             {
                 element.addEventListener("click", function()
@@ -122,7 +136,7 @@
             });
 
             //On Submit, block default html submit, collect data, clear form, submit through ajax, return success/error messages
-            document.querySelectorAll("#auth form").forEach(function(element)
+            document.querySelectorAll("#profile form").forEach(function(element)
             {
                 element.addEventListener("submit", function(event)
                 {
@@ -153,7 +167,7 @@
                         {                    
                             let data = JSON.parse(this.responseText);
                             
-                            resultOutput.innerHTML = '<div class="alert alert-'+data.alert_type+' mb-0 mt-2 mx-0" role="alert">'+data.alert_msg+'</div>';
+                            resultOutput.innerHTML = '<div class="alert alert-'+data.alert_type+' m-0 p-3" role="alert">'+data.alert_msg+'</div>';
                         }
                     };
                     
