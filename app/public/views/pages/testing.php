@@ -85,8 +85,8 @@
                                     </form>                                    
                     
                                     <form id="register" class="modal-body m-1 p-1" method="POST" action="/user_register" style="display:none">
-                                        Email: <input class="form-control" type="text" name="username" placeholder="Username...">
-                                        Username: <input class="form-control" type="email" name="email" placeholder="Email...">
+                                        Email: <input class="form-control" type="email" name="email" placeholder="Email...">
+                                        Username: <input class="form-control" type="text" name="username" placeholder="Username...">
                                         Password: <input class="form-control" type="password" name="password" placeholder="Password...">
                                         <input type="submit" class="btn btn-primary mt-1" value="Submit">
                                     </form>  

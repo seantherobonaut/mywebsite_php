@@ -3,6 +3,13 @@
 
     $app = new Router();
 
+    $app->get("test", function()
+    {
+        header('Content-Type: text/html; charset=utf-8');
+
+        echo 'testing!';      
+    });
+
     $app->get("testing", function($route_data)
     {
         header('Content-Type: text/html; charset=utf-8');
