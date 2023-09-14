@@ -103,4 +103,78 @@
         else
             echo json_encode(array("alert_type" => "info", "alert_msg" => "Missing fields!"));
     });
+
+    $app->get("account_activation", function($route_data)
+    {
+        header('Content-Type: text/html; charset=utf-8');
+
+        $user = array_shift($route_data);
+        $token = array_shift($route_data);
+
+        /*
+            look up user by id, pull out token, see if "type of token" matches, see if token matches, compare timestamps of token
+        */
+
+        $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `user_id`=?;");
+        $query->runQuery(array($user));
+        
+        //Does the user exist?
+        if($query->rowCount() > 0)
+        {
+            $record = $query->fetch();
+            $token_array = json_decode($record['token'],true);
+
+            //Is this a register token?
+            if($token_array['type']=='register')
+            {
+                //Does the token provided match the token of the user?
+                if($token == $token_array['token'])
+                {
+                    $token_time = $token_array['date'];
+                    $current_time = time();
+
+                    //Did the click the link in less than 15 minutes?
+                    if(($current_time-$token_time)<=900)
+                    {
+                        if($record['active'] == false)
+                        {
+                            //update the user's account status
+                            $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `active`=? WHERE `user_id`= ?;");
+                            $query->runQuery(array(true, $record['user_id']));
+    
+                            echo "Account activation successful!";
+                            append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'Activation successful!'."\n");
+                        }
+                        else
+                        {
+                            echo "Acount is already active...";
+                            append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'Account is already active'."\n");
+                        }
+                    }
+                    else
+                    {
+                        echo "Link expired...";
+                        append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'Token is older than 15 minutes'."\n");
+                    }
+                }
+                else
+                {
+                    echo "Invalid link!";
+                    append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'Tokens do not mach!'."\n");
+                }
+            }  
+            else
+            {
+                echo "Invalid link!";
+                append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'Incorrect token type!'."\n");
+            }
+        }
+        else
+        {
+            echo "Invalid link!";
+            append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'UserID not found!'."\n");
+        }
+
+        //error output only "invalid link" or "expired link" store real error in logs
+    });
 ?>
