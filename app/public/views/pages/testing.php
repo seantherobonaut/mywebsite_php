@@ -62,7 +62,6 @@
                                     <div id="profilebuttons" class="btn-group-vertical">
                                         <button type="button" class="btn btn-outline-dark active" data-targetform="login">Sign In</button>
                                         <button type="button" class="btn btn-outline-dark" data-targetform="forgotPass">Forgot Pass</button>
-                                        <button type="button" class="btn btn-outline-dark" data-targetform="forgotEmail">Forgot Email</button>
                                         <button type="button" class="btn btn-outline-dark" data-targetform="register">Register</button>                            
                                     </div>                                    
                                 </div>
@@ -75,12 +74,6 @@
                     
                                     <form id="forgotPass" class="modal-body m-1 p-1" method="POST" action="/forgotPass" style="display:none">
                                         Email: <input class="form-control" type="email" name="email" placeholder="Email...">
-                                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
-                                    </form>   
-
-                                    <form id="forgotEmail" class="modal-body m-1 p-1" method="POST" action="/forgotEmail" style="display:none">
-                                        Username: <input class="form-control" type="text" name="username" placeholder="Username...">
-                                        After getting username, put a list of personal questions here<br>
                                         <input type="submit" class="btn btn-primary mt-1" value="Submit">
                                     </form>                                    
                     
