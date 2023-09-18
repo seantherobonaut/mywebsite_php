@@ -44,6 +44,7 @@
 
         </div>
 
+        <!-- TODO resend activation, have banner at top always showing something -->
   
         <!-- Profile Prompt -->
         <div id="profile" class="modal fade mt-5">
@@ -82,7 +83,13 @@
                                         Username: <input class="form-control" type="text" name="username" placeholder="Username...">
                                         Password: <input class="form-control" type="password" name="password" placeholder="Password...">
                                         <input type="submit" class="btn btn-primary mt-1" value="Submit">
+                                        <button id="resend_activation_btn" type="button" class="btn btn-outline-dark mt-1">Resend Activation</button>
                                     </form>  
+
+                                    <form id="resend_activation" class="modal-body m-1 p-1" method="POST" action="/resend_activation" style="display:none">
+                                        Email: <input class="form-control" type="email" name="email" placeholder="Email...">
+                                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -94,6 +101,21 @@
 
         
         <script type="text/javascript">
+
+            //Button to show the resend activation form
+            document.getElementById("resend_activation_btn").addEventListener("click", function()
+            {
+                //reset and hide register form
+                let register = document.getElementById("register");
+                register.reset();
+                register.style.display = "none";
+
+                //clear alerts
+                document.getElementById("results").innerHTML = "";
+                    
+                //show resend form
+                document.getElementById("resend_activation").style.display = "block";
+            });
 
             //Modal form controls (toggle forms on/off)
             let authButtons = document.querySelectorAll("#profilebuttons button");
