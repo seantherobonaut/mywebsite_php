@@ -43,8 +43,6 @@
             </button>
 
         </div>
-
-        <!-- TODO resend activation, have banner at top always showing something -->
   
         <!-- Profile Prompt -->
         <div id="profile" class="modal fade mt-5">
@@ -73,12 +71,12 @@
                                         <input type="submit" class="btn btn-primary mt-1" value="Login">
                                     </form>    
                     
-                                    <form id="forgotPass" class="modal-body m-1 p-1" method="POST" action="/forgotPass" style="display:none">
+                                    <form id="forgotPass" class="modal-body m-1 p-1" method="POST" action="/forgot_password" style="display:none">
                                         Email: <input class="form-control" type="email" name="email" placeholder="Email...">
                                         <input type="submit" class="btn btn-primary mt-1" value="Submit">
                                     </form>                                    
                     
-                                    <form id="register" class="modal-body m-1 p-1" method="POST" action="/user_register" style="display:none">
+                                    <form id="register" class="modal-body m-1 p-1" method="POST" action="/account_register" style="display:none">
                                         Email: <input class="form-control" type="email" name="email" placeholder="Email...">
                                         Username: <input class="form-control" type="text" name="username" placeholder="Username...">
                                         Password: <input class="form-control" type="password" name="password" placeholder="Password...">

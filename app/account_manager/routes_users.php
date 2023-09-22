@@ -1,6 +1,17 @@
 <?php
+    /* TODO
+    
+        - Have alert banner always showing default message of "Account Management" or something
+        - When waiting from response from sever, have animated text or something until the new banner changes to "success"
+        - Instead of blank pages displaying "activation successful" or "invalid email"... maybe have a 
+        page that loads instantly and then does a loading spinner instead of a blank page with "loading"
+
+        - use trim() to make sure password and email, etc doesn't have whitespaces on left or right
+                emails are unaffected, usernames are because we said "alphanumeric"
+    */
+
     //Create new user from data 
-    $app->post("user_register", function($route_data)
+    $app->post("account_register", function($route_data)
     {
         header('Content-Type: application/json; charset=utf-8');
 
@@ -15,9 +26,7 @@
                     $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `username`=?;");
                     $query->runQuery(array($_POST['username']));
                     if($query->rowCount() == 0)
-                    {
-                        //TODO button for resend activation email (ONLY if active=false, make a new token each time)
-                        
+                    {   
                         //check if email is already taken
                         $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `email`=?;");
                         $query->runQuery(array($_POST['email']));
@@ -174,6 +183,10 @@
 
                             echo "Account activation successful!";
                             append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'Activation successful!'."\n");
+
+                            //clear the token
+                            $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `token`=? WHERE `user_id`= ?;");
+                            $query->runQuery(array("{}", $user));
                         }
                         else
                         {
@@ -209,6 +222,8 @@
     //Resend activation email if user exists, and isn't activated
     $app->post("resend_activation", function($route_data)
     {
+        header('Content-Type: application/json; charset=utf-8');
+
         //Ensure data isn't empty
         if(!empty($_POST['email']))
         {
@@ -216,9 +231,12 @@
 
             $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `email`=?;");
             $query->runQuery(array($email));
+
+            //Does the user exist?
             if($query->rowCount()>0)
             {
                 $result = $query->fetch();
+                //Is the user's account active?
                 if(!$result['active'])
                 {
                     $user_id = $result['user_id'];
@@ -282,5 +300,165 @@
         }
         else
             echo json_encode(array("alert_type" => "danger", "alert_msg" => "Missing fields!"));
+    });
+
+    $app->post("forgot_password", function($route_data)
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        //Ensure data isn't empty
+        if(!empty($_POST['email']))
+        {
+            $email = $_POST['email'];
+            $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `email`=?;");
+            $query->runQuery(array($email));
+
+            //Does a user with that email exist?
+            if($query->rowCount()>0)
+            {
+                $result = $query->fetch();
+
+                $user_id = $result['user_id'];
+                $email_addr = $result['email'];
+                $username = $result['username'];
+                $website = $_SERVER['SERVER_NAME'];
+
+                $token_str = bin2hex(random_bytes(20));
+                $token = json_encode(array("type" => "forgot_password", "date" => time(), "token" => $token_str));
+
+                //Set user's token in DB
+                $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `token`=? WHERE `user_id`= ?;");
+                $query->runQuery(array($token, $user_id));
+
+                $headers = array(
+                    "From" => "Test System <no-reply@email.com>",  
+                    "X-Sender" => "Test System <no-reply@email.com>",
+                    "X-Mailer" => "PHP/".phpversion(),
+                    "Reply-To" => "Test System <no-reply@email.com>",
+                    "Return-Path" => "Test System <no-reply@email.com>", 
+                    "X-Priority" => "1",
+                    "MIME-Version" => "1.0",
+                    "Content-Type" => "text/html; charset=UTF-8"
+                );
+
+                $link = $_SERVER['SERVER_NAME'];
+                if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+                    $link = 'https://'.$link;
+                else
+                    $link = 'http://'.$link;
+                $link .= '/'.'password_reset'.'/'.$user_id.'/'.$token_str;
+
+                $msg = "
+                <html>
+                <head>
+                <title>Password Reset</title>
+                </head>
+                <body>
+                <p>
+                Hello $username,<br><br>
+                Please click the link below to reset your password. It expires in 15 minutes.<br><br>
+                <a href='$link'>$link</a>
+                </p>
+                </body>
+                </html>
+                ";
+
+                $to = $email_addr;
+                $subject = "Password reset for $website";
+
+                mail($to, $subject, $msg, $headers);
+
+                echo json_encode(array("alert_type" => "success", "alert_msg" => "Password reset email sent!"));
+            }
+            else
+                echo json_encode(array("alert_type" => "info", "alert_msg" => "Email not found."));
+        }
+        else
+            echo json_encode(array("alert_type" => "danger", "alert_msg" => "Missing fields!"));
+    });
+
+    $app->get("password_reset", function($route_data)
+    {
+        header('Content-Type: text/html; charset=utf-8');
+
+        $user = array_shift($route_data);
+        $token = array_shift($route_data);
+
+        require 'password_reset_page.php';
+    });
+
+    $app->post("change_password", function($route_data)
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        if(!empty($_POST['user_id']) && !empty($_POST['token_str']))
+        {
+            if(!empty($_POST['password'] && !empty($_POST['confirm_pass'])))
+            {
+                $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `user_id`=?;");
+                $query->runQuery(array($_POST['user_id']));
+    
+                //check if the user exists
+                if($query->rowCount() > 0)
+                {
+                    $record = $query->fetch();
+                    $token_array = json_decode($record['token'],true);
+    
+                    //Is this a forgot password token?
+                    if($token_array['type']=='forgot_password')
+                    {
+                        //Does the token provided match the token of the user?
+                        if($_POST['token_str'] == $token_array['token'])
+                        {
+                            $token_time = $token_array['date'];
+                            $current_time = time();
+    
+                            //Did the click the link in less than 15 minutes?
+                            if(($current_time-$token_time)<=900)
+                            {
+                                $password = trim($_POST['password']);
+                                $confirmpass = trim($_POST['confirm_pass']);
+                                
+                                //Do both passwords match? 
+                                if($password == $confirmpass)
+                                {
+                                    //Old password can't be new password
+                                    if(!password_verify($password, $record['password']))
+                                    {
+                                        $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `password`=? WHERE `user_id`= ?;");
+                                        $query->runQuery(array(password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['user_id']));
+    
+                                        echo json_encode(array("alert_type" => "success", "alert_msg" => "Password updated!"));
+
+                                        //clear the token
+                                        $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `token`=? WHERE `user_id`= ?;");
+                                        $query->runQuery(array("{}", $_POST['user_id']));
+                                    }
+                                    else
+                                        echo json_encode(array("alert_type" => "info", "alert_msg" => "New password can't be old password!"));
+                                }
+                                else
+                                    echo json_encode(array("alert_type" => "info", "alert_msg" => "Passwords do not match!"));
+                            }
+                            else
+                                echo json_encode(array("alert_type" => "info", "alert_msg" => "Link expired!"));
+                        }
+                        else
+                            echo json_encode(array("alert_type" => "info", "alert_msg" => "Tokens do not match!"));
+                    }
+                    else
+                        echo json_encode(array("alert_type" => "info", "alert_msg" => "Wrong token type!"));
+    
+                }
+                else
+                    echo json_encode(array("alert_type" => "info", "alert_msg" => "User doesn't exist!"));
+    
+            }
+            else
+                echo json_encode(array("alert_type" => "info", "alert_msg" => "Missing fields!"));
+        
+        }
+        else
+            echo json_encode(array("alert_type" => "danger", "alert_msg" => "Bad link"));
     });
 ?>
