@@ -2,6 +2,13 @@
     <div class="row">
         <div class="col text-center mb-4">
             <h1 class="display-4 m-3">Hello there!</h1>
+<pre style="text-align:left;max-width:300px;margin:auto">
+<?php
+echo 'Hello world!<br>';
+session_start();
+print_r($_SESSION);
+?>
+</pre>
             <p>Greetings and welcome to my personal website!</p>
             <p>This is my favorite video about inspiration from my years on a robotics team.</p>            
             <div class="embed-responsive embed-responsive-4by3" style="max-width: 700px;margin:auto">

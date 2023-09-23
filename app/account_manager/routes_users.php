@@ -1,6 +1,6 @@
 <?php
     /* TODO
-    
+
         - Have alert banner always showing default message of "Account Management" or something
         - When waiting from response from sever, have animated text or something until the new banner changes to "success"
         - Instead of blank pages displaying "activation successful" or "invalid email"... maybe have a 
@@ -460,5 +460,46 @@
         }
         else
             echo json_encode(array("alert_type" => "danger", "alert_msg" => "Bad link"));
+    });
+
+    $app->post("login", function($route_data)
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        //No empty fields
+        if(!empty($_POST['username'] && !empty($_POST['password'])))
+        {
+            $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `username`=?;");
+            $query->runQuery(array($_POST['username']));
+
+            //User exists
+            if($query->rowCount() > 0)
+            {
+                $record = $query->fetch();
+
+                //Check if password matches hash in database
+                if(password_verify($_POST['password'], $record['password']))
+                {
+                    echo json_encode(array("alert_type" => "success", "alert_msg" => "Success!"));
+                    if(session_status() !== PHP_SESSION_ACTIVE) session_start();
+                    $_SESSION['user_id'] = $record['user_id'];
+                    $_SESSION['username'] = $record['username'];
+                    $_SESSION['rank'] = $record['rank'];
+                }
+                else
+                    echo json_encode(array("alert_type" => "info", "alert_msg" => "Password incorrect!"));
+            }
+            else
+                echo json_encode(array("alert_type" => "info", "alert_msg" => "User doesn't exist!"));
+        }
+        else
+            echo json_encode(array("alert_type" => "info", "alert_msg" => "Missing fields!"));
+    });
+
+    $app->get("logout", function($route_data)
+    {
+        session_start();
+        session_destroy();
+        echo '<html><body><script type="text/javascript">window.location.href = "/";</script></body></html>';
     });
 ?>

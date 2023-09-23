@@ -181,6 +181,10 @@
                             let data = JSON.parse(this.responseText);
                             
                             resultOutput.innerHTML = '<div class="alert alert-'+data.alert_type+' m-0 p-3" role="alert">'+data.alert_msg+'</div>';
+
+                            //If login is successful, redirect to home page
+                            if(element.id == "login" && data.alert_type == "success")
+                                window.location.href = "/";
                         }
                     };
                     

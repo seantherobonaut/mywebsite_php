@@ -7,7 +7,7 @@
     {
         header('Content-Type: text/html; charset=utf-8');
 
-        echo 'testing!';      
+        echo 'Hello world!';
     });
 
     $app->get("testing", function($route_data)
