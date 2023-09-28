@@ -1,5 +1,15 @@
 <?php
-    $app->get("page", function($route_data)
+    $app->get("/", function()
+    {
+        header('Content-Type: text/html; charset=utf-8');
+
+        $page = 'home';
+        $type = 'home';
+        $subtemplate = $GLOBALS['path_public'].'views/pages/'.$type.'.php';        
+        require $GLOBALS['path_public'].'views/root_template.php';
+    });
+    
+    $app->get("/page", function($route_data)
     {
         header('Content-Type: text/html; charset=utf-8');
 

@@ -1,20 +1,134 @@
 <?php
     /* TODO
+        fix front end so it looks nice on phones
 
-        - Have alert banner always showing default message of "Account Management" or something
-        - When waiting from response from sever, have animated text or something until the new banner changes to "success"
-        - Instead of blank pages displaying "activation successful" or "invalid email"... maybe have a 
-        page that loads instantly and then does a loading spinner instead of a blank page with "loading"
+        come up the color standards for alerts
+        
+        work on the logged in prompts
+   */
 
-        - use trim() to make sure password and email, etc doesn't have whitespaces on left or right
-                emails are unaffected, usernames are because we said "alphanumeric"
-    */
+    $app->get("/account", function($route_data)
+    {
+        header('Content-Type: text/html; charset=utf-8');
+       
+        $sub_template = "account_main";
+        $page = array_shift($route_data);
+        
+        if($page == "activation")
+            $sub_template = "account_activation";
+        
+        if($page == "change_password")
+            $sub_template = "account_change_pass";
+        
+        require $GLOBALS['path_app'].'account_manager/account_template.php';
+    });
 
-    //Create new user from data 
-    $app->post("account_register", function($route_data)
+    //Activate account if token from emailed link is valid
+    $app->post("/account/activation", function($route_data)
     {
         header('Content-Type: application/json; charset=utf-8');
 
+        //required variables
+        $user = $_POST['user_id'];
+        $token = $_POST['token_str'];
+        if(!empty($user) && !empty($token))
+        {
+            $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `user_id`=?;");
+            $query->runQuery(array($user));
+            
+            //Does the user exist?
+            if($query->rowCount() > 0)
+            {
+                $record = $query->fetch();
+                $token_array = json_decode($record['token'],true);
+
+                //Does a token exist?
+                if(!empty($token_array))
+                {
+                    //Is this a register token?
+                    if($token_array['type']=='register')
+                    {
+                        //Does the token provided match the token of the user?
+                        if($token == $token_array['token'])
+                        {
+                            $token_time = $token_array['date'];
+                            $current_time = time();
+        
+                            //Did the click the link in less than 15 minutes?
+                            if(($current_time-$token_time)<=900)
+                            {
+                                if($record['active'] == false)
+                                {
+                                    //update the user's account status
+                                    $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `active`=? WHERE `user_id`= ?;");
+                                    $query->runQuery(array(true, $record['user_id']));
+        
+                                    //Send user confirmation email that their account has been activated on purpose
+                                    $email_addr = $record['email'];
+                                    $username = $record['username'];
+                                    $website = $_SERVER['SERVER_NAME'];
+                                    $headers = array(
+                                        "From" => "Test System <no-reply@email.com>",  
+                                        "X-Sender" => "Test System <no-reply@email.com>",
+                                        "X-Mailer" => "PHP/".phpversion(),
+                                        "Reply-To" => "Test System <no-reply@email.com>",
+                                        "Return-Path" => "Test System <no-reply@email.com>", 
+                                        "X-Priority" => "1",
+                                        "MIME-Version" => "1.0",
+                                        "Content-Type" => "text/html; charset=UTF-8"
+                                    );
+                                    $msg = "
+                                    <html>
+                                    <head>
+                                    <title>Successful Account Activation</title>
+                                    </head>
+                                    <body>
+                                    <p>
+                                    Hello $username,<br><br>
+                                    Thank you for activating your account for $website!<br><br>
+                                    </p>
+                                    </body>
+                                    </html>
+                                    ";
+                                    $to = $email_addr;
+                                    $subject = "Successful activation for $website";
+                
+                                    mail($to, $subject, $msg, $headers);
+        
+                                    echo json_encode(array("alert_type" => "info", "alert_msg" => 'Activation successful!'."\n"));
+        
+                                    //clear the token
+                                    $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `token`=? WHERE `user_id`= ?;");
+                                    $query->runQuery(array("{}", $user));
+                                }
+                                else
+                                    echo json_encode(array("alert_type" => "info", "alert_msg" => 'Account already active!'."\n"));
+                            }
+                            else                      
+                                echo json_encode(array("alert_type" => "info", "alert_msg" => 'Expired token!'."\n"));
+                        }
+                        else                
+                            echo json_encode(array("alert_type" => "info", "alert_msg" => 'Token mismatch!'."\n"));
+                    }  
+                    else            
+                        echo json_encode(array("alert_type" => "info", "alert_msg" => 'Wrong token type!'."\n"));
+                }
+                else
+                    echo json_encode(array("alert_type" => "info", "alert_msg" => 'Token has already been used or was never created'."\n"));
+            }
+            else          
+                echo json_encode(array("alert_type" => "info", "alert_msg" => 'User not found!'."\n"));
+        }
+        else
+            echo json_encode(array("alert_type" => "info", "alert_msg" => 'Missing arguments!'."\n"));
+    });    
+
+    //Create new user from data 
+    $app->post("/account/register", function($route_data)
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        //required variables
         if(!empty($_POST['username']) && !empty($_POST['email']) && !empty($_POST['password']))
         {
             //ensure username and email are valid
@@ -71,7 +185,7 @@
                                 else
                                     $link = 'http://'.$link;
 
-                                $link .= '/'.'account_activation'.'/'.$user_id.'/'.$token_str;
+                                $link .= '/'.'account/activation'.'?user_id='.$user_id.'&token_str='.$token_str;
 
                                 $msg = "
                                 <html>
@@ -114,117 +228,12 @@
             echo json_encode(array("alert_type" => "info", "alert_msg" => "Missing fields!"));
     });
 
-    //Activate account if token from emailed link is valid
-    $app->get("account_activation", function($route_data)
-    {
-        header('Content-Type: text/html; charset=utf-8');
-
-        $user = array_shift($route_data);
-        $token = array_shift($route_data);
-
-        $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `user_id`=?;");
-        $query->runQuery(array($user));
-        
-        //Does the user exist?
-        if($query->rowCount() > 0)
-        {
-            $record = $query->fetch();
-            $token_array = json_decode($record['token'],true);
-
-            //Is this a register token?
-            if($token_array['type']=='register')
-            {
-                //Does the token provided match the token of the user?
-                if($token == $token_array['token'])
-                {
-                    $token_time = $token_array['date'];
-                    $current_time = time();
-
-                    //Did the click the link in less than 15 minutes?
-                    if(($current_time-$token_time)<=900)
-                    {
-                        if($record['active'] == false)
-                        {
-                            //update the user's account status
-                            $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `active`=? WHERE `user_id`= ?;");
-                            $query->runQuery(array(true, $record['user_id']));
-
-                            //Send user confirmation email that their account has been activated on purpose
-                            $email_addr = $record['email'];
-                            $username = $record['username'];
-                            $website = $_SERVER['SERVER_NAME'];
-                            $headers = array(
-                                "From" => "Test System <no-reply@email.com>",  
-                                "X-Sender" => "Test System <no-reply@email.com>",
-                                "X-Mailer" => "PHP/".phpversion(),
-                                "Reply-To" => "Test System <no-reply@email.com>",
-                                "Return-Path" => "Test System <no-reply@email.com>", 
-                                "X-Priority" => "1",
-                                "MIME-Version" => "1.0",
-                                "Content-Type" => "text/html; charset=UTF-8"
-                            );
-                            $msg = "
-                            <html>
-                            <head>
-                            <title>Successful Account Activation</title>
-                            </head>
-                            <body>
-                            <p>
-                            Hello $username,<br><br>
-                            Thank you for activating your account for $website!<br><br>
-                            </p>
-                            </body>
-                            </html>
-                            ";
-                            $to = $email_addr;
-                            $subject = "Successful activation for $website";
-        
-                            mail($to, $subject, $msg, $headers);
-
-                            echo "Account activation successful!";
-                            append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'Activation successful!'."\n");
-
-                            //clear the token
-                            $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `token`=? WHERE `user_id`= ?;");
-                            $query->runQuery(array("{}", $user));
-                        }
-                        else
-                        {
-                            echo "Acount is already active...";
-                            append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'Account is already active'."\n");
-                        }
-                    }
-                    else
-                    {
-                        echo "Link expired...";
-                        append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'Token is older than 15 minutes'."\n");
-                    }
-                }
-                else
-                {
-                    echo "Invalid link!";
-                    append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'Tokens do not mach!'."\n");
-                }
-            }  
-            else
-            {
-                echo "Invalid link!";
-                append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'Incorrect token type!'."\n");
-            }
-        }
-        else
-        {
-            echo "Invalid link!";
-            append_file($GLOBALS['path_app'].'logs/debug.log', date('[Y-n-d G:i:s e]').' - '.'UserID not found!'."\n");
-        }
-    });
-
     //Resend activation email if user exists, and isn't activated
-    $app->post("resend_activation", function($route_data)
+    $app->post("/account/resend_activation", function($route_data)
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        //Ensure data isn't empty
+        //required variables
         if(!empty($_POST['email']))
         {
             $email = $_POST['email'];
@@ -268,7 +277,7 @@
                     else
                         $link = 'http://'.$link;
 
-                    $link .= '/'.'account_activation'.'/'.$user_id.'/'.$new_token_str;
+                    $link .= '/'.'account/activation'.'?user_id='.$user_id.'&token_str='.$new_token_str;
 
                     $msg = "
                     <html>
@@ -302,11 +311,11 @@
             echo json_encode(array("alert_type" => "danger", "alert_msg" => "Missing fields!"));
     });
 
-    $app->post("forgot_password", function($route_data)
+    $app->post("/account/forgot_password", function($route_data)
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        //Ensure data isn't empty
+        //required variables
         if(!empty($_POST['email']))
         {
             $email = $_POST['email'];
@@ -346,7 +355,7 @@
                     $link = 'https://'.$link;
                 else
                     $link = 'http://'.$link;
-                $link .= '/'.'password_reset'.'/'.$user_id.'/'.$token_str;
+                $link .= '/'.'account/change_password'.'?user_id='.$user_id.'&token_str='.$token_str;
 
                 $msg = "
                 <html>
@@ -377,20 +386,11 @@
             echo json_encode(array("alert_type" => "danger", "alert_msg" => "Missing fields!"));
     });
 
-    $app->get("password_reset", function($route_data)
-    {
-        header('Content-Type: text/html; charset=utf-8');
-
-        $user = array_shift($route_data);
-        $token = array_shift($route_data);
-
-        require 'password_reset_page.php';
-    });
-
-    $app->post("change_password", function($route_data)
+    $app->post("/account/change_password", function($route_data)
     {
         header('Content-Type: application/json; charset=utf-8');
 
+        //required variables
         if(!empty($_POST['user_id']) && !empty($_POST['token_str']))
         {
             if(!empty($_POST['password'] && !empty($_POST['confirm_pass'])))
@@ -403,70 +403,73 @@
                 {
                     $record = $query->fetch();
                     $token_array = json_decode($record['token'],true);
-    
-                    //Is this a forgot password token?
-                    if($token_array['type']=='forgot_password')
-                    {
-                        //Does the token provided match the token of the user?
-                        if($_POST['token_str'] == $token_array['token'])
-                        {
-                            $token_time = $token_array['date'];
-                            $current_time = time();
-    
-                            //Did the click the link in less than 15 minutes?
-                            if(($current_time-$token_time)<=900)
-                            {
-                                $password = trim($_POST['password']);
-                                $confirmpass = trim($_POST['confirm_pass']);
-                                
-                                //Do both passwords match? 
-                                if($password == $confirmpass)
-                                {
-                                    //Old password can't be new password
-                                    if(!password_verify($password, $record['password']))
-                                    {
-                                        $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `password`=? WHERE `user_id`= ?;");
-                                        $query->runQuery(array(password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['user_id']));
-    
-                                        echo json_encode(array("alert_type" => "success", "alert_msg" => "Password updated!"));
 
-                                        //clear the token
-                                        $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `token`=? WHERE `user_id`= ?;");
-                                        $query->runQuery(array("{}", $_POST['user_id']));
+                    //Does a token exist?
+                    if(!empty($token_array))
+                    {
+                        //Is this a forgot password token?
+                        if($token_array['type']=='forgot_password')
+                        {
+                            //Does the token provided match the token of the user?
+                            if($_POST['token_str'] == $token_array['token'])
+                            {
+                                $token_time = $token_array['date'];
+                                $current_time = time();
+        
+                                //Did the click the link in less than 15 minutes?
+                                if(($current_time-$token_time)<=900)
+                                {
+                                    $password = trim($_POST['password']);
+                                    $confirmpass = trim($_POST['confirm_pass']);
+                                    
+                                    //Do both passwords match? 
+                                    if($password == $confirmpass)
+                                    {
+                                        //Old password can't be new password
+                                        if(!password_verify($password, $record['password']))
+                                        {
+                                            $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `password`=? WHERE `user_id`= ?;");
+                                            $query->runQuery(array(password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['user_id']));
+        
+                                            echo json_encode(array("alert_type" => "success", "alert_msg" => "Password updated!"));
+    
+                                            //clear the token
+                                            $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `token`=? WHERE `user_id`= ?;");
+                                            $query->runQuery(array("{}", $_POST['user_id']));
+                                        }
+                                        else
+                                            echo json_encode(array("alert_type" => "info", "alert_msg" => "New password can't be old password!"));
                                     }
                                     else
-                                        echo json_encode(array("alert_type" => "info", "alert_msg" => "New password can't be old password!"));
+                                        echo json_encode(array("alert_type" => "info", "alert_msg" => "Passwords do not match!"));
                                 }
                                 else
-                                    echo json_encode(array("alert_type" => "info", "alert_msg" => "Passwords do not match!"));
+                                    echo json_encode(array("alert_type" => "info", "alert_msg" => "Link expired!"));
                             }
                             else
-                                echo json_encode(array("alert_type" => "info", "alert_msg" => "Link expired!"));
+                                echo json_encode(array("alert_type" => "info", "alert_msg" => "Tokens do not match!"));
                         }
                         else
-                            echo json_encode(array("alert_type" => "info", "alert_msg" => "Tokens do not match!"));
+                            echo json_encode(array("alert_type" => "info", "alert_msg" => "Wrong token type!"));
                     }
                     else
-                        echo json_encode(array("alert_type" => "info", "alert_msg" => "Wrong token type!"));
-    
+                        echo json_encode(array("alert_type" => "info", "alert_msg" => "User doesn't exist!"));
                 }
                 else
-                    echo json_encode(array("alert_type" => "info", "alert_msg" => "User doesn't exist!"));
-    
+                    echo json_encode(array("alert_type" => "info", "alert_msg" => 'Token has already been used or was never created'."\n"));
             }
             else
                 echo json_encode(array("alert_type" => "info", "alert_msg" => "Missing fields!"));
-        
         }
         else
-            echo json_encode(array("alert_type" => "danger", "alert_msg" => "Bad link"));
+            echo json_encode(array("alert_type" => "danger", "alert_msg" => "Missing arguments!"));
     });
 
-    $app->post("login", function($route_data)
+    $app->post("/login", function($route_data)
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        //No empty fields
+        //required variables
         if(!empty($_POST['username'] && !empty($_POST['password'])))
         {
             $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `username`=?;");
@@ -496,10 +499,10 @@
             echo json_encode(array("alert_type" => "info", "alert_msg" => "Missing fields!"));
     });
 
-    $app->get("logout", function($route_data)
+    $app->get("/logout", function($route_data)
     {
         session_start();
         session_destroy();
-        echo '<html><body><script type="text/javascript">window.location.href = "/";</script></body></html>';
+        echo '<html><body>You have been logged out. <a href="/">Back to home</a><script type="text/javascript">window.location.href = "/";</script></body></html>';
     });
 ?>

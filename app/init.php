@@ -3,18 +3,11 @@
 
     $app = new Router();
 
-    $app->get("test", function()
+    $app->get("testing", function()
     {
         header('Content-Type: text/html; charset=utf-8');
 
-        echo 'Hello world!';
-    });
-
-    $app->get("testing", function($route_data)
-    {
-        header('Content-Type: text/html; charset=utf-8');
-
-        require $GLOBALS['path_public'].'views/pages/testing.php';
+        echo "Hello world!";
     });
 
     //Overwrite the basic 404 route
