@@ -1,10 +1,13 @@
 <div class="container-fluid">
+    <div class="text-center">
+        <a class="btn btn-lg btn-outline-info mb-3" href="/" role="button">Home</a>
+    </div>
     <h1 class="text-center">Profile Interface</h1> 
-    <p>Create and manage your profile and account here</p>   
+    <p class="text-center">Create and manage your account here</p>   
 </div>
 
 <div id="profile" class="container p-0">
-    <div id="results" class="container lh-1 p-2" ><!-- Bootstrap alerts go here --></div>           
+    <div id="results" class="container lh-1 px-2" ><!-- Bootstrap alerts go here --></div>           
 
     <form id="login" class="m-1 p-1" method="POST" action="/login">
         Username: <input class="form-control" type="text" name="username" placeholder="Username..." >

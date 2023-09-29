@@ -1,11 +1,8 @@
 <?php
     /* TODO
-        fix front end so it looks nice on phones
 
-        come up the color standards for alerts
-        
         work on the logged in prompts
-   */
+    */
 
     $app->get("/account", function($route_data)
     {
@@ -29,12 +26,10 @@
         header('Content-Type: application/json; charset=utf-8');
 
         //required variables
-        $user = $_POST['user_id'];
-        $token = $_POST['token_str'];
-        if(!empty($user) && !empty($token))
+        if(!empty($_POST['user_id']) && !empty($_POST['token_str']))
         {
             $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `user_id`=?;");
-            $query->runQuery(array($user));
+            $query->runQuery(array($_POST['user_id']));
             
             //Does the user exist?
             if($query->rowCount() > 0)
@@ -49,7 +44,7 @@
                     if($token_array['type']=='register')
                     {
                         //Does the token provided match the token of the user?
-                        if($token == $token_array['token'])
+                        if($_POST['token_str'] == $token_array['token'])
                         {
                             $token_time = $token_array['date'];
                             $current_time = time();
@@ -95,11 +90,11 @@
                 
                                     mail($to, $subject, $msg, $headers);
         
-                                    echo json_encode(array("alert_type" => "info", "alert_msg" => 'Activation successful!'."\n"));
+                                    echo json_encode(array("alert_type" => "success", "alert_msg" => 'Activation successful!'."\n"));
         
                                     //clear the token
                                     $query = $GLOBALS['db_conn']->getQuery("UPDATE `users` SET `token`=? WHERE `user_id`= ?;");
-                                    $query->runQuery(array("{}", $user));
+                                    $query->runQuery(array("{}", $record['user_id']));
                                 }
                                 else
                                     echo json_encode(array("alert_type" => "info", "alert_msg" => 'Account already active!'."\n"));
@@ -120,7 +115,7 @@
                 echo json_encode(array("alert_type" => "info", "alert_msg" => 'User not found!'."\n"));
         }
         else
-            echo json_encode(array("alert_type" => "info", "alert_msg" => 'Missing arguments!'."\n"));
+            echo json_encode(array("alert_type" => "warning", "alert_msg" => 'Missing arguments!'."\n"));
     });    
 
     //Create new user from data 
@@ -196,7 +191,7 @@
                                 <p>
                                 Hello $username,<br><br>
                                 Please click the link below to activate your account. It expires in 15 minutes.<br><br>
-                                <a href='$link'>$link</a>
+                                <a href='$link' target='_blank'>$link</a>
                                 </p>
                                 </body>
                                 </html>
@@ -225,7 +220,7 @@
                 echo json_encode(array("alert_type" => "warning", "alert_msg" => "Username must be alphanumeric!"));
         }
         else
-            echo json_encode(array("alert_type" => "info", "alert_msg" => "Missing fields!"));
+            echo json_encode(array("alert_type" => "warning", "alert_msg" => "Missing fields!"));
     });
 
     //Resend activation email if user exists, and isn't activated
@@ -288,7 +283,7 @@
                     <p>
                     Hello $username,<br><br>
                     Please click the link below to activate your account. It expires in 15 minutes.<br><br>
-                    <a href='$link'>$link</a>
+                    <a href='$link' target='_blank'>$link</a>
                     </p>
                     </body>
                     </html>
@@ -308,7 +303,7 @@
                 echo json_encode(array("alert_type" => "info", "alert_msg" => "Email not found."));
         }
         else
-            echo json_encode(array("alert_type" => "danger", "alert_msg" => "Missing fields!"));
+            echo json_encode(array("alert_type" => "warning", "alert_msg" => "Missing fields!"));
     });
 
     $app->post("/account/forgot_password", function($route_data)
@@ -318,9 +313,8 @@
         //required variables
         if(!empty($_POST['email']))
         {
-            $email = $_POST['email'];
             $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `email`=?;");
-            $query->runQuery(array($email));
+            $query->runQuery(array($_POST['email']));
 
             //Does a user with that email exist?
             if($query->rowCount()>0)
@@ -366,7 +360,7 @@
                 <p>
                 Hello $username,<br><br>
                 Please click the link below to reset your password. It expires in 15 minutes.<br><br>
-                <a href='$link'>$link</a>
+                <a href='$link' target='_blank'>$link</a>
                 </p>
                 </body>
                 </html>
@@ -383,7 +377,7 @@
                 echo json_encode(array("alert_type" => "info", "alert_msg" => "Email not found."));
         }
         else
-            echo json_encode(array("alert_type" => "danger", "alert_msg" => "Missing fields!"));
+            echo json_encode(array("alert_type" => "warning", "alert_msg" => "Missing fields!"));
     });
 
     $app->post("/account/change_password", function($route_data)
@@ -391,9 +385,9 @@
         header('Content-Type: application/json; charset=utf-8');
 
         //required variables
-        if(!empty($_POST['user_id']) && !empty($_POST['token_str']))
+        if(!empty($_POST['password'] && !empty($_POST['confirm_pass'])))
         {
-            if(!empty($_POST['password'] && !empty($_POST['confirm_pass'])))
+            if(!empty($_POST['user_id']) && !empty($_POST['token_str']))
             {
                 $query = $GLOBALS['db_conn']->getQuery("SELECT * FROM `users` WHERE `user_id`=?;");
                 $query->runQuery(array($_POST['user_id']));
@@ -453,16 +447,16 @@
                             echo json_encode(array("alert_type" => "info", "alert_msg" => "Wrong token type!"));
                     }
                     else
-                        echo json_encode(array("alert_type" => "info", "alert_msg" => "User doesn't exist!"));
+                        echo json_encode(array("alert_type" => "info", "alert_msg" => "Token has already been used or was never created"));
                 }
                 else
-                    echo json_encode(array("alert_type" => "info", "alert_msg" => 'Token has already been used or was never created'."\n"));
+                    echo json_encode(array("alert_type" => "info", "alert_msg" => "User doesn't exist!"));
             }
             else
-                echo json_encode(array("alert_type" => "info", "alert_msg" => "Missing fields!"));
+                echo json_encode(array("alert_type" => "warning", "alert_msg" => "Missing arguments!"));
         }
         else
-            echo json_encode(array("alert_type" => "danger", "alert_msg" => "Missing arguments!"));
+            echo json_encode(array("alert_type" => "warning", "alert_msg" => "Missing fields!"));
     });
 
     $app->post("/login", function($route_data)
@@ -490,13 +484,13 @@
                     $_SESSION['rank'] = $record['rank'];
                 }
                 else
-                    echo json_encode(array("alert_type" => "info", "alert_msg" => "Password incorrect!"));
+                    echo json_encode(array("alert_type" => "danger", "alert_msg" => "Password incorrect!"));
             }
             else
                 echo json_encode(array("alert_type" => "info", "alert_msg" => "User doesn't exist!"));
         }
         else
-            echo json_encode(array("alert_type" => "info", "alert_msg" => "Missing fields!"));
+            echo json_encode(array("alert_type" => "warning", "alert_msg" => "Missing fields!"));
     });
 
     $app->get("/logout", function($route_data)

@@ -24,8 +24,8 @@
         </style>
     </head>
     <body>
-        <div class="container my-3 px-10 py-5 bg-dark text-white rounded-circle" style="max-width:700px">
-            <div style="margin:60px 120px">
+        <div class="container mt-4 pt-4 pb-4 bg-dark text-white rounded-circle" style="max-width:600px">
+            <div style="max-width:350px;margin:0px auto 110px auto">
                 <!-- Sub Template -->
                 <?php require "$sub_template.php";?>
             </div>
@@ -102,7 +102,7 @@
 
                             //if login is successful, redirect to home page
                             if(element.id == "login" && data.alert_type == "success")
-                                window.location.href = "/";
+                                window.location.href = "/account";
                         }
                     };
                     

@@ -1,11 +1,17 @@
-<div id="profile" class="container p-0">             
-    <h1>Account Activation</h1> 
-    <div id="results" class="container lh-1 p-0" ><!-- Bootstrap alerts go here --></div>
-    <a class="nav_button btn btn-outline-secondary mt-2" href="/" role="button">Home</a>
-    <a class="nav_button btn btn-primary mt-2" href="/account" role="button">Sign In</a>
+<div class="container-fluid">
+    <h1 class="text-center">Account Activation</h1>   
 </div>
-<script type="text/javascript">
-    //automatically send post request once the page loads
+<div id="profile" class="container p-0">             
+    <div id="results" class="container lh-1 px-2" ><!-- Bootstrap alerts go here --></div>
+    
+    <!-- try opening with # or something with target=_blank.. follow guidelines and find a way -->
+    <div class="m-1 p-1">
+        <button class="btn btn-secondary" type="button" onclick="window.close()">Close Tab</button>
+    </div>
+</div>
+
+<script type="text/javascript">    
+    //Automatically send post request once the page loads
 
     //query parameters
     let data = window.location.search.replace('?', '');
