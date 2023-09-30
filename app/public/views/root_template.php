@@ -34,21 +34,20 @@
         </div>
         
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-sm navbar-dark flex-shrink-0" style="background-color:#263238">            
-            <div class="container-fluid p-0 justify-content-end" style="max-width: 1140px">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <nav class="navbar navbar-expand-sm navbar-dark flex-shrink-0" style="background-color:#263238">
+            <div class="container-fluid justify-content-end" style="max-width: 1140px">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link <?php if($page=='home')echo 'active';?>" href="/">Home</a></li>
                         <li class="nav-item"><a class="nav-link <?php if($page=='about')echo 'active';?>" href="/page/about">About Me</a></li>   
                         <li class="nav-item"><a class="nav-link" href="<?php echo $GLOBALS['path_local'];?>Resume.pdf">Resume</a></li>   
                     </ul>
-                </div>  
+                </div>
             </div>
-        </nav> 
+        </nav>
 
         <!-- Content -->
         <div class="flex-grow-1">
