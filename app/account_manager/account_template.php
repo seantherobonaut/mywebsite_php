@@ -21,11 +21,31 @@
             #profile form input{margin-bottom:10px;}
 
             #profile form input[type=submit]{margin-bottom:0px;}
+
+            #profile form 
+            {
+                border-bottom:1px solid white;
+                padding-bottom:15px;
+            }
+
+            #main
+            {
+                color: white;
+                max-width:600px;
+            }
+
+            #main > div
+            {
+                max-width:350px;
+                margin:0px auto 110px auto;
+            }
+
+            button.nav_button{color:white;}
         </style>
     </head>
     <body>
-        <div class="container mt-4 pt-4 pb-4 bg-dark text-white rounded-circle" style="max-width:600px">
-            <div style="max-width:350px;margin:0px auto 110px auto">
+        <div id="main" class="container mt-4 pt-4 pb-4 bg-dark rounded-circle">
+            <div>
                 <!-- Sub Template -->
                 <?php require "$sub_template.php";?>
             </div>

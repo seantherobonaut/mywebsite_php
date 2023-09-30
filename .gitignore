@@ -13,3 +13,4 @@ gitstart.sh
 index.php
 /app/db_creds_admin.php
 /app/db_creds_basic.php
+git-code-version.txt

@@ -10,11 +10,9 @@
         <title><?php echo ucfirst($page);?></title>            
         <link rel="shortcut icon" href="<?php echo $GLOBALS['path_local'];?>images/awesome_face.ico">
 
-        <!-- Jquery and Bootstrap -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>        
-        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <!-- Bootstrap 5 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <!-- Font for icons -->
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -27,11 +25,11 @@
             
         <!-- Header -->
         <div id="header" class="jumbotron text-center border p-4 flex-shrink-0">
-            <div id="bannerBG"></div>
+            <div id="bannerBG" style="background-image:url(<?php echo $GLOBALS['path_local'];?>images/bridge3.jpg)"></div>
             <img src="<?php echo $GLOBALS['path_local'];?>images/me2.jpg" class="rounded-circle img-thumbnail img-fluid" width="250" height="250" alt="Sean Leapley">
             <h3>
-                <small class="font-italic">"Imagination is more important than knowledge."</small>
-                <p class="blockquote-footer small" style="font-size:70%;margin-top:10px">Albert Einstein</p>
+                <small class="fst-italic fw-normal">"Imagination is more important than knowledge."</small>
+                <p class="blockquote-footer small fw-normal" style="font-size:70%;margin-top:10px">Albert Einstein</p>
             </h3>
         </div>
         

@@ -9,5 +9,5 @@
         Confirm: <input class="form-control" type="password" name="confirm_pass" placeholder="Confirm Password...">
         <input type="submit" class="btn btn-primary mt-1" value="Submit">
         <button class="btn btn-secondary mt-1" type="button" onclick="window.close()">Close Tab</button>
-    </form>  
+    </form>
 </div>
