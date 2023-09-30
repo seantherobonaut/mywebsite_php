@@ -6,6 +6,8 @@ For the website to even start, the global paths must be configured in index.php.
 $GLOBALS['path_root'] = __DIR__.'/'; 
 $GLOBALS['path_app'] = $GLOBALS['path_root'].'app/'; 
 $GLOBALS['path_lib'] = $GLOBALS['path_root'].'lib/';
+$GLOBALS['path_public'] = $GLOBALS['path_app'].'public/';
+$GLOBALS['path_local'] = '/'.str_replace($GLOBALS['path_root'],"",$GLOBALS['path_public']);
 
 require $GLOBALS['path_app'].'server/init.php';    
 ```
