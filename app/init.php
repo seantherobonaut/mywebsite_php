@@ -3,11 +3,11 @@
 
     $app = new Router();
 
-    $app->get("testing", function($route_data)
+    $app->get("testing", function()
     {
         header('Content-Type: text/html; charset=utf-8');
 
-        require $GLOBALS['path_public'].'views/pages/testing.php';
+        echo "Hello world!";
     });
 
     //Overwrite the basic 404 route
@@ -20,7 +20,8 @@
     });
 
     //Add all routes below
-    require $GLOBALS['path_app'].'routes_pages.php';
+    require $GLOBALS['path_app'].'account_manager/routes_users.php';
+    require $GLOBALS['path_app'].'public/routes_pages.php';
 
     $app->listen();
 ?>

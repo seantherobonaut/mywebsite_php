@@ -3,11 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=0device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
             
         <meta name="author" content="Sean Leapley">
-        <meta name="description" content="Testing page">
-        <title>Testing!</title>            
+        <meta name="description" content="Profile Interface">
+        <title>Profile Interface</title>            
 
         <!-- Bootstrap 5 -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -18,86 +18,30 @@
 
             body{background-color:#777;}
 
-            #auth form input
-            {
-                margin-bottom:10px;
-            }
+            #profile form input{margin-bottom:10px;}
 
-            #auth form input[type=submit]
-            {
-                margin-bottom:0px;
-            }
+            #profile form input[type=submit]{margin-bottom:0px;}
         </style>
     </head>
     <body>
-
-
-
-        <div id="mybox" class="container my-5 px-5 py-5 bg-dark text-white rounded-circle" style="max-width:700px;">
-            <h1>Test Bootstrap Page</h1> 
-            <p>This container has a dark background and uses special rounded corners that change shape with its size.</p>    
-
-            
-
-            <!-- login button -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#auth">
-                Login   
-            </button>
-
+        <div class="container mt-4 pt-4 pb-4 bg-dark text-white rounded-circle" style="max-width:600px">
+            <div style="max-width:350px;margin:0px auto 110px auto">
+                <!-- Sub Template -->
+                <?php require "$sub_template.php";?>
+            </div>
         </div>
 
-  
-        <!-- Login Prompt -->
-        <div id="auth" class="modal mt-5">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    
-                    <div class="modal-header">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-outline-dark active" data-targetform="login">Sign In</button>
-                            <button type="button" class="btn btn-outline-dark" data-targetform="forgotPass">Forgot Password</button>
-                            <button type="button" class="btn btn-outline-dark" data-targetform="createNew">Register</button>                            
-                        </div>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div id="results" class="container lh-1 p-2" ><!-- Bootstrap alerts go here --></div>
-                    
-                    <form id="login" class="modal-body" method="POST" action="/login">
-                        Username: <input class="form-control" type="text" name="username" placeholder="Username..." >
-                        Pass: <input class="form-control" type="password" name="password" placeholder="Password...">
-                        <input type="submit" class="btn btn-primary mt-1" value="Login">
-                    </form>    
-
-                    <form id="forgotPass" class="modal-body" method="POST" action="/login" style="display:none">
-                        Email: <input class="form-control" type="email" name="email" placeholder="Email...">
-                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
-                    </form>   
-
-                    <form id="createNew" class="modal-body" method="POST" action="/login" style="display:none">
-                        Email: <input class="form-control" type="text" name="username" placeholder="Username...">
-                        Username: <input class="form-control" type="email" name="email" placeholder="Email...">
-                        Password: <input class="form-control" type="password" name="password" placeholder="Password...">
-                        <input type="submit" class="btn btn-primary mt-1" value="Submit">
-                    </form>  
-                
-                </div>
-            </div>
-        </div>        
-
-        
         <script type="text/javascript">
-
             //Modal form controls (toggle forms on/off)
-            let authButtons = document.querySelectorAll("#auth .modal-header button");
-            let authForms = document.querySelectorAll("#auth form");
+            let authButtons = document.querySelectorAll("#profile button.nav_button");
+            let authForms = document.querySelectorAll("#profile form");
             authButtons.forEach(function(element)
             {
                 element.addEventListener("click", function()
                 {
                     let button = this;
                     let targetID = this.dataset.targetform;
-
+                    
                     //ensure all buttons inactive
                     authButtons.forEach(function(element)
                     {
@@ -105,7 +49,7 @@
                     });
                     //make this button active
                     button.classList.add("active");
-                    
+
                     //ensure hiding and resetting all forms
                     authForms.forEach(function(element)
                     {
@@ -113,7 +57,7 @@
                         element.style.display = "none";
                     });
 
-                    //clear the alerts
+                    //clear bootstrap alerts
                     document.getElementById("results").innerHTML = "";
                     
                     //show target form
@@ -122,7 +66,7 @@
             });
 
             //On Submit, block default html submit, collect data, clear form, submit through ajax, return success/error messages
-            document.querySelectorAll("#auth form").forEach(function(element)
+            document.querySelectorAll("#profile form").forEach(function(element)
             {
                 element.addEventListener("submit", function(event)
                 {
@@ -135,6 +79,12 @@
                     //Stringify all values into string labeled "data"
                     let inputs = this.querySelectorAll('input:not([type="submit"])');
                     let data = "";
+                    
+                    //Add query parameters if they are there!
+                    let queryString = window.location.search.replace('?', '');
+                    if(queryString!="")
+                        data += queryString+"&";
+
                     inputs.forEach(function(item)
                     {
                         data += item.name + "=" + item.value + "&";
@@ -144,6 +94,8 @@
 
                     //target result box
                     let resultOutput = document.getElementById("results");
+                    //have a little spinner for request delays
+                    resultOutput.innerHTML = '<div class="alert alert-secondary m-0 p-3" role="alert">Processing... <img width=15 heigh=15 src="https://i.gifer.com/ZZ5H.gif" /></div>';
                 
                     //this runs when we get a response
                     let xhttp = new XMLHttpRequest();
@@ -153,10 +105,25 @@
                         {                    
                             let data = JSON.parse(this.responseText);
                             
-                            resultOutput.innerHTML = '<div class="alert alert-'+data.alert_type+' mb-0 mt-2 mx-0" role="alert">'+data.alert_msg+'</div>';
+                            //output a bootstrap alert
+                            resultOutput.innerHTML = '<div class="alert alert-'+data.alert_type+' m-0 p-3" role="alert">'+data.alert_msg+'</div>';
+
+                            //if login is successful, redirect to home page
+                            if(element.id == "login" && data.alert_type == "success")
+                            {
+                                setTimeout(function()
+                                {
+                                    location.reload();
+                                }, 1000);
+                            }
+
+                            //update username on page if changed
+                            if(element.id == "update-username" && data.alert_type == "success")
+                                document.getElementById("usrnm").innerText = data.new_username;
                         }
                     };
                     
+                    //reset the form instantly
                     this.reset();
 
                     if(method="get")
@@ -172,9 +139,6 @@
                     }    
                 });
             });
-
         </script>
-        
-        
     </body>
 </html>
