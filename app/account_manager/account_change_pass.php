@@ -1,5 +1,5 @@
-<div class="container-fluid">
-    <h1 class="text-center">Change Password</h1>   
+<div class="container-fluid mt-3">
+    <h3 class="text-center">Change Password</h3>   
 </div>
 <div id="profile" class="container p-0">           
     <div id="results" class="container lh-1 px-2" ><!-- Bootstrap alerts go here --></div>

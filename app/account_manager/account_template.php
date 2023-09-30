@@ -42,6 +42,14 @@
                     let button = this;
                     let targetID = this.dataset.targetform;
                     
+                    //ensure all buttons inactive
+                    authButtons.forEach(function(element)
+                    {
+                        element.classList.remove("active");
+                    });
+                    //make this button active
+                    button.classList.add("active");
+
                     //ensure hiding and resetting all forms
                     authForms.forEach(function(element)
                     {
@@ -102,7 +110,16 @@
 
                             //if login is successful, redirect to home page
                             if(element.id == "login" && data.alert_type == "success")
-                                window.location.href = "/account";
+                            {
+                                setTimeout(function()
+                                {
+                                    location.reload();
+                                }, 1000);
+                            }
+
+                            //update username on page if changed
+                            if(element.id == "update-username" && data.alert_type == "success")
+                                document.getElementById("usrnm").innerText = data.new_username;
                         }
                     };
                     
