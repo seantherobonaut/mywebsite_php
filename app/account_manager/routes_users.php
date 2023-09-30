@@ -71,11 +71,11 @@
                                     $username = $record['username'];
                                     $website = $_SERVER['SERVER_NAME'];
                                     $headers = array(
-                                        "From" => "Sean Leapley Website <no-reply@email.com>",  
-                                        "X-Sender" => "Sean Leapley Website <no-reply@email.com>",
+                                        "From" => "Sean's Website <no-reply@email.com>",  
+                                        "X-Sender" => "Sean's Website <no-reply@email.com>",
                                         "X-Mailer" => "PHP/".phpversion(),
-                                        "Reply-To" => "Sean Leapley Website <no-reply@email.com>",
-                                        "Return-Path" => "Sean Leapley Website <no-reply@email.com>", 
+                                        "Reply-To" => "Sean's Website <no-reply@email.com>",
+                                        "Return-Path" => "Sean's Website <no-reply@email.com>", 
                                         "X-Priority" => "1",
                                         "MIME-Version" => "1.0",
                                         "Content-Type" => "text/html; charset=UTF-8"
@@ -168,11 +168,11 @@
                                 $record = $query->fetch();
 
                                 $headers = array(
-                                    "From" => "Sean Leapley Website <no-reply@email.com>",  
-                                    "X-Sender" => "Sean Leapley Website <no-reply@email.com>",
+                                    "From" => "Sean's Website <no-reply@email.com>",  
+                                    "X-Sender" => "Sean's Website <no-reply@email.com>",
                                     "X-Mailer" => "PHP/".phpversion(),
-                                    "Reply-To" => "Sean Leapley Website <no-reply@email.com>",
-                                    "Return-Path" => "Sean Leapley Website <no-reply@email.com>", 
+                                    "Reply-To" => "Sean's Website <no-reply@email.com>",
+                                    "Return-Path" => "Sean's Website <no-reply@email.com>", 
                                     "X-Priority" => "1",
                                     "MIME-Version" => "1.0",
                                     "Content-Type" => "text/html; charset=UTF-8"
@@ -265,11 +265,11 @@
                     $query->runQuery(array($new_token, $user_id));
 
                     $headers = array(
-                        "From" => "Sean Leapley Website <no-reply@email.com>",  
-                        "X-Sender" => "Sean Leapley Website <no-reply@email.com>",
+                        "From" => "Sean's Website <no-reply@email.com>",  
+                        "X-Sender" => "Sean's Website <no-reply@email.com>",
                         "X-Mailer" => "PHP/".phpversion(),
-                        "Reply-To" => "Sean Leapley Website <no-reply@email.com>",
-                        "Return-Path" => "Sean Leapley Website <no-reply@email.com>", 
+                        "Reply-To" => "Sean's Website <no-reply@email.com>",
+                        "Return-Path" => "Sean's Website <no-reply@email.com>", 
                         "X-Priority" => "1",
                         "MIME-Version" => "1.0",
                         "Content-Type" => "text/html; charset=UTF-8"
@@ -344,11 +344,11 @@
                 $query->runQuery(array($token, $user_id));
 
                 $headers = array(
-                    "From" => "Sean Leapley Website <no-reply@email.com>",  
-                    "X-Sender" => "Sean Leapley Website <no-reply@email.com>",
+                    "From" => "Sean's Website <no-reply@email.com>",  
+                    "X-Sender" => "Sean's Website <no-reply@email.com>",
                     "X-Mailer" => "PHP/".phpversion(),
-                    "Reply-To" => "Sean Leapley Website <no-reply@email.com>",
-                    "Return-Path" => "Sean Leapley Website <no-reply@email.com>", 
+                    "Reply-To" => "Sean's Website <no-reply@email.com>",
+                    "Return-Path" => "Sean's Website <no-reply@email.com>", 
                     "X-Priority" => "1",
                     "MIME-Version" => "1.0",
                     "Content-Type" => "text/html; charset=UTF-8"
@@ -630,11 +630,11 @@
                         $query->runQuery(array($token, $user_id));
         
                         $headers = array(
-                            "From" => "Sean Leapley Website <no-reply@email.com>",  
-                            "X-Sender" => "Sean Leapley Website <no-reply@email.com>",
+                            "From" => "Sean's Website <no-reply@email.com>",  
+                            "X-Sender" => "Sean's Website <no-reply@email.com>",
                             "X-Mailer" => "PHP/".phpversion(),
-                            "Reply-To" => "Sean Leapley Website <no-reply@email.com>",
-                            "Return-Path" => "Sean Leapley Website <no-reply@email.com>", 
+                            "Reply-To" => "Sean's Website <no-reply@email.com>",
+                            "Return-Path" => "Sean's Website <no-reply@email.com>", 
                             "X-Priority" => "1",
                             "MIME-Version" => "1.0",
                             "Content-Type" => "text/html; charset=UTF-8"
@@ -727,11 +727,11 @@
                                 $username = $record['username'];
                                 $website = $_SERVER['SERVER_NAME'];
                                 $headers = array(
-                                    "From" => "Sean Leapley Website <no-reply@email.com>",  
-                                    "X-Sender" => "Sean Leapley Website <no-reply@email.com>",
+                                    "From" => "Sean's Website <no-reply@email.com>",  
+                                    "X-Sender" => "Sean's Website <no-reply@email.com>",
                                     "X-Mailer" => "PHP/".phpversion(),
-                                    "Reply-To" => "Sean Leapley Website <no-reply@email.com>",
-                                    "Return-Path" => "Sean Leapley Website <no-reply@email.com>", 
+                                    "Reply-To" => "Sean's Website <no-reply@email.com>",
+                                    "Return-Path" => "Sean's Website <no-reply@email.com>", 
                                     "X-Priority" => "1",
                                     "MIME-Version" => "1.0",
                                     "Content-Type" => "text/html; charset=UTF-8"
@@ -805,11 +805,11 @@
                 $query->runQuery(array($token, $user_id));
 
                 $headers = array(
-                    "From" => "Sean Leapley Website <no-reply@email.com>",  
-                    "X-Sender" => "Sean Leapley Website <no-reply@email.com>",
+                    "From" => "Sean's Website <no-reply@email.com>",  
+                    "X-Sender" => "Sean's Website <no-reply@email.com>",
                     "X-Mailer" => "PHP/".phpversion(),
-                    "Reply-To" => "Sean Leapley Website <no-reply@email.com>",
-                    "Return-Path" => "Sean Leapley Website <no-reply@email.com>", 
+                    "Reply-To" => "Sean's Website <no-reply@email.com>",
+                    "Return-Path" => "Sean's Website <no-reply@email.com>", 
                     "X-Priority" => "1",
                     "MIME-Version" => "1.0",
                     "Content-Type" => "text/html; charset=UTF-8"
@@ -891,11 +891,11 @@
                                 $username = $record['username'];
                                 $website = $_SERVER['SERVER_NAME'];
                                 $headers = array(
-                                    "From" => "Sean Leapley Website <no-reply@email.com>",  
-                                    "X-Sender" => "Sean Leapley Website <no-reply@email.com>",
+                                    "From" => "Sean's Website <no-reply@email.com>",  
+                                    "X-Sender" => "Sean's Website <no-reply@email.com>",
                                     "X-Mailer" => "PHP/".phpversion(),
-                                    "Reply-To" => "Sean Leapley Website <no-reply@email.com>",
-                                    "Return-Path" => "Sean Leapley Website <no-reply@email.com>", 
+                                    "Reply-To" => "Sean's Website <no-reply@email.com>",
+                                    "Return-Path" => "Sean's Website <no-reply@email.com>", 
                                     "X-Priority" => "1",
                                     "MIME-Version" => "1.0",
                                     "Content-Type" => "text/html; charset=UTF-8"
