@@ -25,7 +25,7 @@
     $loader->enable(true);
 
     //Database connection setup
-    $db_creds = json_decode(getenv('DB_REMOTE'), 1);    
+    require $GLOBALS['path_app'].'db_creds_admin.php';   
     $GLOBALS['db_conn'] = new DBconn;
     $GLOBALS['db_conn']->addHandler(function($error)
     {
