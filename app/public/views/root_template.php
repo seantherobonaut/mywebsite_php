@@ -24,7 +24,7 @@
         <?php require $GLOBALS['path_public'].'views/frontEndCompat.php';?>
             
         <!-- Header -->
-        <div id="header" class="jumbotron text-center border p-4 flex-shrink-0">
+        <div id="header" class="jumbotron text-center border p-5 flex-shrink-0">
             <div id="bannerBG" style="background-image:url(<?php echo $GLOBALS['path_local'];?>images/bridge3.jpg)"></div>
             <a id="account_button" href="/account"><?php if(!empty($_SESSION['user_data']))echo $_SESSION['user_data']['username'];?><img src="<?php echo $GLOBALS['path_local'];?>images/profile_icon.png" alt="Profile"></a>
             <img src="<?php echo $GLOBALS['path_local'];?>images/me2.jpg" class="rounded-circle img-thumbnail img-fluid" width="250" height="250" alt="Sean Leapley">
