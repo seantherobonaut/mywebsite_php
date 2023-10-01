@@ -50,7 +50,7 @@
                 <?php require "$sub_template.php";?>
             </div>
         </div>
-
+        
         <script type="text/javascript">
             //Modal form controls (toggle forms on/off)
             let authButtons = document.querySelectorAll("#profile button.nav_button");
@@ -115,7 +115,7 @@
                     //target result box
                     let resultOutput = document.getElementById("results");
                     //have a little spinner for request delays
-                    resultOutput.innerHTML = '<div class="alert alert-secondary m-0 p-3" role="alert">Processing... <img width=15 heigh=15 src="https://i.gifer.com/ZZ5H.gif" /></div>';
+                    resultOutput.innerHTML = '<div class="alert alert-secondary m-0 p-3" role="alert">Processing... <img width=15 heigh=15 src="<?php echo $GLOBALS['path_local'];?>images/spinner.gif" /></div>';
                 
                     //this runs when we get a response
                     let xhttp = new XMLHttpRequest();
