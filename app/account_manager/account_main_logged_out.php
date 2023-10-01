@@ -15,7 +15,7 @@
         <input type="submit" class="btn btn-primary mt-1" value="Submit">        
     </form>    
 
-    <form id="forgotPass" class="m-1 px-1" method="POST" action="/account/forgot_password" style="display:none">
+    <form id="forgotPass" class="m-1 px-1" method="POST" action="/account/password/forgot" style="display:none">
         Email: <input class="form-control" type="email" name="email" placeholder="Email...">    
         <input type="submit" class="btn btn-primary mt-1" value="Submit">        
     </form>                                    
@@ -28,7 +28,7 @@
         <button type="button" class="nav_button btn btn-outline-info mt-1" data-targetform="resend_activation">Resend Activation</button>            
     </form>  
 
-    <form id="resend_activation" class="m-1 px-1" method="POST" action="/account/resend_activation" style="display:none">
+    <form id="resend_activation" class="m-1 px-1" method="POST" action="/account/activation/resend" style="display:none">
         Email: <input class="form-control" type="email" name="email" placeholder="Email...">
         <input type="submit" class="btn btn-primary mt-1" value="Submit">        
     </form>

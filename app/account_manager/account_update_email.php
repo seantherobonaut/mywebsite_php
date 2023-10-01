@@ -35,7 +35,7 @@
         }
     };
 
-    xhttp.open("post", "/account/change_email", true);
+    xhttp.open("post", "/account/email/confirm", true);
     xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhttp.send(data);
 </script>

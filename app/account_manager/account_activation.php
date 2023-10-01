@@ -35,7 +35,7 @@
         }
     };
 
-    xhttp.open("post", "/account/activation", true);
+    xhttp.open("post", "/account/activation/confirm", true);
     xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xhttp.send(data);
 </script>

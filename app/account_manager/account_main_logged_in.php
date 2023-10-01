@@ -17,18 +17,18 @@
 <div id="profile" class="container p-0">
     <div id="results" class="container lh-1 px-2" ><!-- Bootstrap alerts go here --></div>           
 
-    <form id="update-username" class="m-1 px-1" method="POST" action="/account/update/username" style="display:none">
+    <form id="update-username" class="m-1 px-1" method="POST" action="/account/username/update" style="display:none">
         Username: <input class="form-control" type="text" name="new_username" placeholder="Username...">
         <input type="submit" class="btn btn-primary mt-1" value="Submit">
     </form>
     
-    <form id="update-password" class="m-1 px-1" method="POST" action="/account/update/password" style="display:none">
+    <form id="update-password" class="m-1 px-1" method="POST" action="/account/password/update" style="display:none">
         New Password: <input class="form-control" type="password" name="password" placeholder="Password...">
         Confirm Pass: <input class="form-control" type="password" name="confirm_pass" placeholder="Confirm Password...">
         <input type="submit" class="btn btn-primary mt-1" value="Submit">
      </form>
      
-    <form id="update-email" class="m-1 px-1" method="POST" action="/account/update/email" style="display:none">
+    <form id="update-email" class="m-1 px-1" method="POST" action="/account/email/update" style="display:none">
         New Email: <input class="form-control" type="email" name="new_email" placeholder="New Email...">
         <input type="submit" class="btn btn-primary mt-1" value="Submit">
     </form>
