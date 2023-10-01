@@ -9,6 +9,7 @@ body{min-height:100%;}
     position:relative;
     background:none;
 }
+
 #bannerBG
 {
     position:absolute;
@@ -21,7 +22,25 @@ body{min-height:100%;}
     background-position:center center;
     -moz-background-size: cover;
     background-size: cover;                       
-}            
+}  
+
+#account_button
+{
+    position: absolute;
+    top:10px;
+    right:10px;
+    z-index: 1;
+    color:black;
+}
+#account_button img
+{
+    width:40px;
+    height:40px;
+    border:1px solid black;
+    border-radius:10px;
+    margin-left:10px;
+}
+
 
 /* Nav styles */
 #collapsibleNavbar > ul > li > a
